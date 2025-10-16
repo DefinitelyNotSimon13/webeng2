@@ -1,0 +1,16 @@
+{
+  "cwd": "/home/simon/dev/web-eng/test-f7",
+  "type": ["web", "pwa"],
+  "name": "My App",
+  "framework": "react",
+  "template": "single-view",
+  "cssPreProcessor": false,
+  "bundler": "vite",
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkMode": false,
+    "iconFonts": true
+  },
+  "customBuild": false
+}
