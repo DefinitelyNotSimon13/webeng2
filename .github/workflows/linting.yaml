@@ -1,0 +1,117 @@
+name: Linting
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --fund=false
+
+      - name: Check formatting
+        id: prettier
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          npm run format:check || true
+          npx prettier --list-different . > reports/prettier.txt || true
+
+      - name: Lint
+        id: lint
+        continue-on-error: true
+        run: npm run lint:sarif
+
+      - name: Upload SARIF file
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: reports/eslint.sarif
+          category: eslint
+
+      - name: Summarize results
+        if: always()
+        run: |
+          if [ -s reports/eslint.sarif ]; then
+            ERRORS=$(jq '[.. | objects | select(.ruleId?) | select(.level=="error")] | length' "reports/eslint.sarif")
+            WARNINGS=$(jq '[.. | objects | select(.ruleId?) | select(.level=="warning")] | length' "reports/eslint.sarif")
+          else
+            ERRORS="REPORT UNAVAILABLE"
+            WARNINGS="REPORT UNAVAILABLE"
+          fi
+
+          if [ -s reports/prettier.txt ]; then
+            FMT_STATUS="NOT OK"
+          else
+            FMT_STATUS="OK"
+          fi
+          echo "### Lint & Format Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Formatting: **$FMT_STATUS**" >> $GITHUB_STEP_SUMMARY
+          echo "- Errors: **$ERRORS**" >> $GITHUB_STEP_SUMMARY
+          echo "- Warnings: **$WARNINGS**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -s reports/prettier.txt ]; then
+            echo "#### Files needing formatting:" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat reports/prettier.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -s reports/eslint.sarif ]; then
+            echo "#### ESLint errors and warnings." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Level | Message | Location | Rule |" >> $GITHUB_STEP_SUMMARY
+            echo "|-------|---------|----------|------|" >> $GITHUB_STEP_SUMMARY
+            
+           jq -r '
+              .runs[].results[]
+              | { level, ruleId, message: .message.text,
+                  uri: (
+                    .locations[0].physicalLocation.artifactLocation.uri
+                    | sub("^file://"; "")
+                    | sub("/home/runner/work/webeng2/webeng2/"; "")
+                  ),
+                  line: (.locations[0].physicalLocation.region.startLine // 0),
+                  col:  (.locations[0].physicalLocation.region.startColumn // 0) }
+              | "| \(.level) |  \((.message // "") | gsub("\\n"; " ") | gsub("\\|"; "\\\\|")) | \(.uri):\(.line):\(.col) | \(.ruleId // "-") |"
+            ' reports/eslint.sarif \
+            | head -n 200 >> $GITHUB_STEP_SUMMARY
+
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "_(showing up to 200 findings)_" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail if issues found
+        if: always()
+        run: |
+          FAIL=0
+          if [ "${{ steps.prettier.outcome }}" = "failure" ]; then
+            echo "Formatting issues found."
+            FAIL=1
+          fi
+
+          if [ "${{ steps.lint.outcome }}" = "failure" ]; then
+           echo "Linting issues found."
+           FAIL=1
+          fi
+          exit $FAIL

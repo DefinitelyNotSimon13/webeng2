@@ -10,6 +10,11 @@
     "dev": "cross-env NODE_ENV=development vite",
     "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js",
     "format": "prettier . --write",
+    "format:check": "prettier .",
+    "format:report": "mkdir -p reports && prettier --list-different . > reports/prettier.txt",
+    "lint": "eslint",
+    "lint:sarif": "mkdir -p reports && eslint -f @microsoft/eslint-formatter-sarif -o reports/eslint.sarif",
+    "lint:fix": "eslint --fix",
     "gen:icons": "node scripts/gen-icons.mjs",
     "prepare": "husky"
   },
@@ -32,9 +37,15 @@
     "swiper": "^12.0.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@microsoft/eslint-formatter-sarif": "^3.1.0",
     "@vitejs/plugin-react": "^5.0.4",
     "cpy-cli": "^6.0.0",
     "cross-env": "^10.1.0",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0",
     "husky": "^9.1.7",
     "postcss-preset-env": "^10.4.0",
     "prettier": "3.6.2",
