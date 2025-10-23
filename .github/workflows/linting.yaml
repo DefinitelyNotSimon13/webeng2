@@ -103,7 +103,7 @@ jobs:
               echo "|-------|---------|----------|------|"
               echo "$TABLE"
               echo
-              echo "_(showing up tp 200 findings)_"
+              echo "_(showing up to 200 findings)_"
             fi
           } > reports/summary.md
 
