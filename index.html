@@ -1,11 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Hello!</title>
-    </head>
-    <body>
-        <h1>Hello, World!</h1>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deployments • webeng2</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+  </head>
+  <body>
+    <main class="container">
+        <div></div>
+      <div>
+        <section class="header">
+          <h1>Choose a deployment</h1>
+          <p class="subtitle">Pick a version to open its preview.</p>
+        </section>
+
+        <section class="panel">
+          <div class="controls">
+            <input
+              id="filter"
+              class="input"
+              type="search"
+              placeholder="Filter versions…"
+              aria-label="Filter versions"
+            />
+            <div class="actions">
+              <button id="reload" class="btn secondary" type="button">Reload</button>
+            </div>
+          </div>
+
+          <div id="status" class="status">
+            <div class="spinner" aria-hidden="true"></div>
+            <span>Loading deployments…</span>
+          </div>
+
+          <div class="select-row">
+            <select id="versions" class="select" size="8" aria-label="Available deployments"></select>
+          </div>
+
+          <div id="details" class="details" hidden>
+            <div class="detail-row">
+              <span class="label">Branch:</span>
+              <a id="branchLink" target="_blank" rel="noopener"></a>
+            </div>
+            <div class="detail-row">
+              <span class="label">Last commit:</span>
+              <span id="commitWhen">—</span>
+            </div>
+            <div class="detail-row author-row">
+              <span class="label">By:</span>
+              <a id="authorLink" class="author" target="_blank" rel="noopener">
+                <img id="authorAvatar" class="avatar" alt="" />
+                <span id="authorName"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <a id="openLink" class="btn primary" href="#" target="_blank" rel="noopener">Open</a>
+            <button id="copyLink" class="btn" type="button">Copy Link</button>
+          </div>
+
+          <p id="error" class="error" role="alert" hidden></p>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <small>
+          Data from <code>gh-pages</code> •
+          <a href="https://github.com/DefinitelyNotSimon13/webeng2" target="_blank" rel="noopener">GitHub repo</a>
+        </small>
+      </footer>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
 </html>
