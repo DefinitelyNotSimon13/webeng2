@@ -6,10 +6,20 @@ import eslintConfigPrettier from "eslint-config-prettier";
 
 export default defineConfig([
   {
+    files: ["*.config.js", "workbox-config.js", "scripts/**/*.{js,mjs,cjs}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: globals.browser,
+    },
   },
   pluginReact.configs.flat.recommended,
   eslintConfigPrettier,
