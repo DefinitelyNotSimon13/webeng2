@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
+  "name": "Map App",
   "private": true,
   "version": "1.0.0",
-  "description": "My App",
+  "description": "Map App",
   "repository": "",
   "license": "UNLICENSED",
   "scripts": {
