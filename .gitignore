@@ -38,10 +38,3 @@ www/
 
 .direnv/
 reports/
-
-*.png
-*.ico
-*.svg
-*.ttf
-*.woff
-*.woff2
