@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, feature/**/*]
     tags: ["**"]
   pull_request:
   workflow_dispatch:
@@ -45,11 +45,6 @@ jobs:
           fi
 
           ARTIFACT_NAME="${REF//\//-}"
-
-          echo "Output: $GITHUB_OUTPUT"
-          echo "Ref: $RE)"
-          echo "Path: $(basename $REF)"
-          echo "Artifact: $ARTIFACT_NAME"
 
           echo "path_name=$(basename $REF)" >> "$GITHUB_OUTPUT"
           echo "artifact_name=$ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
