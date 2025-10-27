@@ -17,6 +17,7 @@ const $select = document.getElementById("deployment-select");
 const $picker = document.getElementById("deployment-picker");
 const $status = document.getElementById("picker-status");
 const $details = document.getElementById("details");
+const $preview = document.getElementById("preview");
 
 // ----------------------
 // State
@@ -321,6 +322,14 @@ function setSelection(name) {
 
     // details
     $details.innerHTML = buildDetailsHTML(name);
+    $preview.innerHTML = buildPreviewHTML(name);
+}
+
+function buildPreviewHTML(name) {
+    const meta = metaByName.get(name) || {};
+
+    const hrefAbsolute = `${PAGES_BASE}${name ? `${name}/` : ""}`;
+    return `<embed src="${hrefAbsolute}" class="preview-embed" >`;
 }
 
 function buildDetailsHTML(name) {
