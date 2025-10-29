@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Page, Navbar, Block, List, ListItem } from "framework7-react";
 
 const RequestAndLoad = (props) => {
@@ -23,6 +24,20 @@ const RequestAndLoad = (props) => {
       </List>
     </Page>
   );
+};
+
+RequestAndLoad.propTypes = {
+  user: PropTypes.shape({
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    about: PropTypes.string,
+    links: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+  }).isRequired,
 };
 
 export default RequestAndLoad;

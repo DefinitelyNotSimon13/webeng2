@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Page, Navbar, Block, Link } from "framework7-react";
 
 const DynamicRoutePage = (props) => {
@@ -47,6 +48,22 @@ const DynamicRoutePage = (props) => {
       </Block>
     </Page>
   );
+};
+
+DynamicRoutePage.propTypes = {
+  f7route: PropTypes.shape({
+    url: PropTypes.string,
+    path: PropTypes.string,
+    hash: PropTypes.string,
+    params: PropTypes.object,
+    query: PropTypes.object,
+    route: PropTypes.shape({
+      path: PropTypes.string,
+    }),
+  }).isRequired,
+  f7router: PropTypes.shape({
+    back: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default DynamicRoutePage;

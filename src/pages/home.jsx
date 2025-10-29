@@ -36,7 +36,9 @@ const HomePage = () => (
     </Toolbar>
     {/* Page content */}
     <Block>
-      <p>Here is your blank Framework7 app. Let's see what we have here.</p>
+      <p>
+        Here is your blank Framework7 app. Let&apos;s see what we have here.
+      </p>
     </Block>
     <BlockTitle>Navigation</BlockTitle>
     <List strong inset dividersIos>
