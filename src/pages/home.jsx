@@ -14,6 +14,7 @@ import {
   ListItem,
   Button,
 } from "framework7-react";
+import PoiList from "../components/poi-list";
 
 const HomePage = () => (
   <Page name="home">
@@ -77,6 +78,31 @@ const HomePage = () => (
         link="/request-and-load/user/123456/"
       />
     </List>
+
+    <PoiList
+      items={[
+        {
+          title: "POI 1",
+          description: "Description for POI 1",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg/250px-TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg",
+          link: "https://google.com",
+        },
+        {
+          title: "POI 2",
+          description: "Description for POI 2",
+          image:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Catherine_Connolly%2C_Dec_2024_%2854197775560%29_%28cropped%29.jpg/250px-Catherine_Connolly%2C_Dec_2024_%2854197775560%29_%28cropped%29.jpg",
+          link: "https://google.com",
+        },
+        {
+          title: "POI 3",
+          description: "Description for POI 3",
+          image: "https://via.placeholder.com/150",
+          link: "https://google.com",
+        },
+      ]}
+    />
   </Page>
 );
 export default HomePage;
