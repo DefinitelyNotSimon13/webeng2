@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   f7,
   f7ready,
   App,
   Panel,
-  Views,
   View,
   Popup,
   Page,
   Navbar,
-  Toolbar,
   NavRight,
   Link,
   Block,
-  BlockTitle,
   LoginScreen,
   LoginScreenTitle,
   List,
-  ListItem,
   ListInput,
   ListButton,
   BlockFooter,
@@ -34,7 +30,7 @@ const MyApp = () => {
 
   // Framework7 Parameters
   const f7params = {
-    name: "My App", // App name
+    name: "Map App", // App name
     theme: "auto", // Automatic theme detection
 
     // App store
@@ -44,7 +40,7 @@ const MyApp = () => {
 
     // Register service worker (only on production build)
     serviceWorker:
-      process.env.NODE_ENV === "production"
+      import.meta.env.MODE === "production"
         ? {
             path: "/service-worker.js",
           }
@@ -128,7 +124,7 @@ const MyApp = () => {
               <BlockFooter>
                 Some text about login information.
                 <br />
-                Click "Sign In" to close Login Screen
+                Click &quot;Sign In&quot; to close Login Screen
               </BlockFooter>
             </List>
           </Page>
