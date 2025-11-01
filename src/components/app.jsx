@@ -5,23 +5,15 @@ import {
   f7ready,
   App,
   Panel,
-  Views,
   View,
   Popup,
   Page,
   Navbar,
-  Toolbar,
   NavRight,
   Link,
   Block,
-  BlockTitle,
-  LoginScreen,
-  LoginScreenTitle,
   List,
   ListItem,
-  ListInput,
-  ListButton,
-  BlockFooter,
 } from "framework7-react";
 
 import routes from "../js/routes";
@@ -68,72 +60,36 @@ const MyApp = () => {
       <Panel left cover dark>
         <View>
           <Page>
-            <Navbar title="Left Panel" />
+            <Navbar title="Menu" />
             <Block>Left panel content goes here</Block>
-          </Page>
-        </View>
-      </Panel>
-
-      {/* Right panel with reveal effect*/}
-      <Panel right reveal dark>
-        <View>
-          <Page>
-            <Navbar title="Right Panel" />
-            <Block>Right panel content goes here</Block>
+            <List strong inset dividersIos>
+              <ListItem link="/about/" title="About" />
+              <ListItem link="/settings/" title="Settings" />
+            </List>
           </Page>
         </View>
       </Panel>
 
       {/* Your main view, should have "view-main" class */}
-      <View main className="safe-areas" url="/" />
+      <View main className="safe-areas" url="/">
+        <title>MapP</title>
+      </View>
 
       {/* Popup */}
-      <Popup id="my-popup">
+      <Popup id="POI-list">
         <View>
           <Page>
-            <Navbar title="Popup">
+            <Navbar title="POI List">
               <NavRight>
                 <Link popupClose>Close</Link>
               </NavRight>
             </Navbar>
             <Block>
-              <p>Popup content goes here.</p>
+              <p>POI list here.</p>
             </Block>
           </Page>
         </View>
       </Popup>
-
-      <LoginScreen id="my-login-screen">
-        <View>
-          <Page loginScreen>
-            <LoginScreenTitle>Login</LoginScreenTitle>
-            <List form>
-              <ListInput
-                type="text"
-                name="username"
-                placeholder="Your username"
-                value={username}
-                onInput={(e) => setUsername(e.target.value)}
-              ></ListInput>
-              <ListInput
-                type="password"
-                name="password"
-                placeholder="Your password"
-                value={password}
-                onInput={(e) => setPassword(e.target.value)}
-              ></ListInput>
-            </List>
-            <List>
-              <ListButton title="Sign In" onClick={() => alertLoginData()} />
-              <BlockFooter>
-                Some text about login information.
-                <br />
-                Click "Sign In" to close Login Screen
-              </BlockFooter>
-            </List>
-          </Page>
-        </View>
-      </LoginScreen>
     </App>
   );
 };
