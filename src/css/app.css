@@ -1,1 +1,37 @@
 /* Your app custom styles here */
+
+/* Floating POI button (small square in bottom-right) */
+.poi-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Prevent label wrapping */
+.poi-fab .item-title,
+.poi-fab span {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Reduce padding in inner button if present */
+.poi-fab .button-inner {
+  padding: 0;
+}
+
+@media (max-width: 420px) {
+  .poi-fab {
+    width: 48px;
+    height: 48px;
+    right: 12px;
+    bottom: 12px;
+  }
+}
