@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
-  f7,
   f7ready,
   App,
   Panel,
