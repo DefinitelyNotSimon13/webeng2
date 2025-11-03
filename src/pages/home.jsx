@@ -86,12 +86,6 @@ const HomePage = () => (
       />
     </List>
 
-    {/* Request section */}
-    <BlockTitle>Request Data &amp; Load</BlockTitle>
-    <Block strong inset>
-      <p>Provide request parameters here, then load data.</p>
-    </Block>
-
     {/* Map directly below the request box */}
     <BlockTitle>Map</BlockTitle>
     <div className="mapSection">
