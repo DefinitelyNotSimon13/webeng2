@@ -1,3 +1,1 @@
-npm run lint:fix || echo "\e[1;33mLinting issues found, proceeding anyways...\e[0m"
-npm run format
-git update-index --again
+git-format-staged -f 'prettier --ignore-unknown --stdin --stdin-filepath "{}"' .

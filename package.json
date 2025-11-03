@@ -45,6 +45,7 @@
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
+    "git-format-staged": "^3.1.1",
     "globals": "^16.4.0",
     "husky": "^9.1.7",
     "onchange": "^7.1.0",
