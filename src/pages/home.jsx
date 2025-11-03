@@ -1,84 +1,116 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Page,
   Navbar,
   NavLeft,
   NavTitle,
-  NavTitleLarge,
-  NavRight,
   Link,
-  Toolbar,
   Block,
-  BlockTitle,
-  List,
-  ListItem,
   Button,
+  List,
+  ListInput,
+  Segmented,
 } from "framework7-react";
 
-const HomePage = () => (
-  <Page name="home">
-    {/* Top Navbar */}
-    <Navbar large sliding={false}>
-      <NavLeft>
-        <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="left" />
-      </NavLeft>
-      <NavTitle sliding>My App</NavTitle>
-      <NavRight>
-        <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="right" />
-      </NavRight>
-      <NavTitleLarge>My App</NavTitleLarge>
-    </Navbar>
-    {/* Toolbar */}
-    <Toolbar bottom>
-      <Link>Left Link</Link>
-      <Link>Right Link</Link>
-    </Toolbar>
-    {/* Page content */}
-    <Block>
-      <p>
-        Here is your blank Framework7 app. Let&apos;s see what we have here.
-      </p>
-    </Block>
-    <BlockTitle>Navigation</BlockTitle>
-    <List strong inset dividersIos>
-      <ListItem link="/about/" title="About" />
-      <ListItem link="/form/" title="Form" />
-    </List>
+const HomePage = () => {
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [latHem, setLatHem] = useState("N");
+  const [lngHem, setLngHem] = useState("O");
 
-    <BlockTitle>Modals</BlockTitle>
-    <Block className="grid grid-cols-2 grid-gap">
-      <Button fill popupOpen="#my-popup">
-        Popup
-      </Button>
-      <Button fill loginScreenOpen="#my-login-screen">
-        Login Screen
-      </Button>
-    </Block>
+  const handleSearch = () => {
+    console.log("Search coords:", { lat, latHem, lng, lngHem });
+  };
 
-    <BlockTitle>Panels</BlockTitle>
-    <Block className="grid grid-cols-2 grid-gap">
-      <Button fill panelOpen="left">
-        Left Panel
-      </Button>
-      <Button fill panelOpen="right">
-        Right Panel
-      </Button>
-    </Block>
+  return (
+    <Page name="home">
+      <Navbar>
+        <NavLeft>
+          <Link iconIos="f7:menu" iconMd="material:menu" panelOpen="left" />
+        </NavLeft>
+        <NavTitle>MapP</NavTitle>
+      </Navbar>
 
-    <List strong inset dividersIos>
-      <ListItem
-        title="Dynamic (Component) Route"
-        link="/dynamic-route/blog/45/post/125/?foo=bar#about"
-      />
-      <ListItem
-        title="Default Route (404)"
-        link="/load-something-that-doesnt-exist/"
-      />
-      <ListItem
-        title="Request Data & Load"
-        link="/request-and-load/user/123456/"
-      />
-    </List>
-  </Page>
-);
+      <Block className="coord-box">
+        <div className="coord-pair">
+          <List className="coord-input-list" inset>
+            <ListInput
+              label="Lat"
+              type="text"
+              placeholder="Latitude"
+              value={lat}
+              onInput={(e) => setLat(e.target.value)}
+              clearButton
+            />
+          </List>
+
+          <div className="coord-seg">
+            <Segmented strong outlineIos>
+              <Button
+                small
+                active={latHem === "N"}
+                onClick={() => setLatHem("N")}
+              >
+                N
+              </Button>
+              <Button
+                small
+                active={latHem === "S"}
+                onClick={() => setLatHem("S")}
+              >
+                S
+              </Button>
+            </Segmented>
+          </div>
+        </div>
+
+        <div className="coord-pair">
+          <List className="coord-input-list" inset>
+            <ListInput
+              label="Lng"
+              type="text"
+              placeholder="Longitude"
+              value={lng}
+              onInput={(e) => setLng(e.target.value)}
+              clearButton
+            />
+          </List>
+
+          <div className="coord-seg">
+            <Segmented strong outlineIos>
+              <Button
+                small
+                active={lngHem === "O"}
+                onClick={() => setLngHem("O")}
+              >
+                O
+              </Button>
+              <Button
+                small
+                active={lngHem === "W"}
+                onClick={() => setLngHem("W")}
+              >
+                W
+              </Button>
+            </Segmented>
+          </div>
+        </div>
+
+        <div className="coord-actions">
+          <Button className="coord-search" fill onClick={handleSearch}>
+            Search
+          </Button>
+        </div>
+      </Block>
+
+      <Block>
+        <p>Map here</p>
+      </Block>
+
+      <Button className="poi-fab" fill popupOpen="#POI-list" small>
+        POIs
+      </Button>
+    </Page>
+  );
+};
 export default HomePage;
