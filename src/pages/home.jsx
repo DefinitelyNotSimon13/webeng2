@@ -21,7 +21,7 @@ import {
 } from "react-leaflet";
 import { useEffect, useState } from "react";
 
-const CenterOnLoad = (zoom = 20) => {
+const CenterOnLoad = ({ zoom = 20, showMarker = true }) => {
   const map = useMap();
   const [pos, setPos] = useState(null);
 
