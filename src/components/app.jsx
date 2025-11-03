@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
-  f7,
   f7ready,
   App,
   Panel,
@@ -12,22 +11,14 @@ import {
   NavRight,
   Link,
   Block,
-  LoginScreen,
-  LoginScreenTitle,
   List,
-  ListInput,
-  ListButton,
-  BlockFooter,
+  ListItem,
 } from "framework7-react";
 
 import routes from "../js/routes";
 import store from "../js/store";
 
 const MyApp = () => {
-  // Login screen demo data
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
   // Framework7 Parameters
   const f7params = {
     name: "Map App", // App name
@@ -46,14 +37,7 @@ const MyApp = () => {
           }
         : {},
   };
-  const alertLoginData = () => {
-    f7.dialog.alert(
-      "Username: " + username + "<br>Password: " + password,
-      () => {
-        f7.loginScreen.close();
-      },
-    );
-  };
+
   f7ready(() => {
     // Call F7 APIs here
   });
@@ -64,72 +48,36 @@ const MyApp = () => {
       <Panel left cover dark>
         <View>
           <Page>
-            <Navbar title="Left Panel" />
+            <Navbar title="Menu" />
             <Block>Left panel content goes here</Block>
-          </Page>
-        </View>
-      </Panel>
-
-      {/* Right panel with reveal effect*/}
-      <Panel right reveal dark>
-        <View>
-          <Page>
-            <Navbar title="Right Panel" />
-            <Block>Right panel content goes here</Block>
+            <List strong inset dividersIos>
+              <ListItem link="/about/" title="About" />
+              <ListItem link="/settings/" title="Settings" />
+            </List>
           </Page>
         </View>
       </Panel>
 
       {/* Your main view, should have "view-main" class */}
-      <View main className="safe-areas" url="/" />
+      <View main className="safe-areas" url="/">
+        <title>MapP</title>
+      </View>
 
       {/* Popup */}
-      <Popup id="my-popup">
+      <Popup id="POI-list">
         <View>
           <Page>
-            <Navbar title="Popup">
+            <Navbar title="POI List">
               <NavRight>
                 <Link popupClose>Close</Link>
               </NavRight>
             </Navbar>
             <Block>
-              <p>Popup content goes here.</p>
+              <p>POI list here.</p>
             </Block>
           </Page>
         </View>
       </Popup>
-
-      <LoginScreen id="my-login-screen">
-        <View>
-          <Page loginScreen>
-            <LoginScreenTitle>Login</LoginScreenTitle>
-            <List form>
-              <ListInput
-                type="text"
-                name="username"
-                placeholder="Your username"
-                value={username}
-                onInput={(e) => setUsername(e.target.value)}
-              ></ListInput>
-              <ListInput
-                type="password"
-                name="password"
-                placeholder="Your password"
-                value={password}
-                onInput={(e) => setPassword(e.target.value)}
-              ></ListInput>
-            </List>
-            <List>
-              <ListButton title="Sign In" onClick={() => alertLoginData()} />
-              <BlockFooter>
-                Some text about login information.
-                <br />
-                Click &quot;Sign In&quot; to close Login Screen
-              </BlockFooter>
-            </List>
-          </Page>
-        </View>
-      </LoginScreen>
     </App>
   );
 };
