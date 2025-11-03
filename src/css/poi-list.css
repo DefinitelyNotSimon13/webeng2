@@ -1,0 +1,22 @@
+.poi-horizontal-box {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.poi-vertical-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.poi-image {
+  width: clamp(100px, 20vw, 200px);
+  height: clamp(100px, 20vw, 200px);
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
