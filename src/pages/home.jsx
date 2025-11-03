@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Page,
   Navbar,
@@ -11,17 +12,10 @@ import {
   Segmented,
 } from "framework7-react";
 import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Circle,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { useEffect, useState } from "react";
 
-const CenterOnLoad = ({ zoom = 20, showMarker = true }) => {
+const CenterOnLoad = ({ zoom = 20 }) => {
   const map = useMap();
   const [pos, setPos] = useState(null);
 
