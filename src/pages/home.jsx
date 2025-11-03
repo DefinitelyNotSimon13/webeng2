@@ -15,6 +15,9 @@ import {
   Button,
 } from "framework7-react";
 
+import LeafletMap from "../components/LeafletMap";
+import "../css/leaflet_map.css";
+
 const HomePage = () => (
   <Page name="home">
     {/* Top Navbar */}
@@ -28,17 +31,20 @@ const HomePage = () => (
       </NavRight>
       <NavTitleLarge>My App</NavTitleLarge>
     </Navbar>
+
     {/* Toolbar */}
     <Toolbar bottom>
       <Link>Left Link</Link>
       <Link>Right Link</Link>
     </Toolbar>
+
     {/* Page content */}
     <Block>
       <p>
         Here is your blank Framework7 app. Let&apos;s see what we have here.
       </p>
     </Block>
+
     <BlockTitle>Navigation</BlockTitle>
     <List strong inset dividersIos>
       <ListItem link="/about/" title="About" />
@@ -79,6 +85,31 @@ const HomePage = () => (
         link="/request-and-load/user/123456/"
       />
     </List>
+
+    {/* Request section */}
+    <BlockTitle>Request Data &amp; Load</BlockTitle>
+    <Block strong inset>
+      <p>Provide request parameters here, then load data.</p>
+    </Block>
+
+    {/* Map directly below the request box */}
+    <BlockTitle>Map</BlockTitle>
+    <div className="mapSection">
+      <LeafletMap
+        initialCenter={[47.651, 9.479]}
+        initialZoom={13}
+        enableGeolocation={true}
+        onMapClick={(latlng) => {
+          // Minimal test: logs coordinates, later can start routing or show POIs
+          console.log(
+            "User clicked:",
+            latlng.lat.toFixed(5),
+            latlng.lng.toFixed(5),
+          );
+        }}
+      />
+    </div>
   </Page>
 );
+
 export default HomePage;
