@@ -11,6 +11,8 @@ import {
   ListInput,
   Segmented,
 } from "framework7-react";
+import "leaflet/dist/leaflet.css";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
@@ -103,8 +105,20 @@ const HomePage = () => {
         </div>
       </Block>
 
-      <Block>
-        <p>Map here</p>
+      <Block strong inset style={{ padding: 0 }}>
+        <div style={{ height: "60vh", width: "100%" }}>
+          <MapContainer
+            center={[51.505, -0.09]}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+          </MapContainer>
+        </div>
       </Block>
 
       <Button className="poi-fab" fill popupOpen="#POI-list" small>
