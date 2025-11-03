@@ -11,7 +11,6 @@ import {
   ListInput,
   Segmented,
 } from "framework7-react";
-import PoiList from "../components/poi-list";
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
