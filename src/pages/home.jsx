@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   Page,
   Navbar,
@@ -12,7 +11,42 @@ import {
   Segmented,
 } from "framework7-react";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Circle,
+  useMap,
+} from "react-leaflet";
+import { useEffect, useState } from "react";
+
+const CenterOnLoad = (zoom = 20) => {
+  const map = useMap();
+  const [pos, setPos] = useState(null);
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      console.warn("Geolocation nicht verfügbar");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        const latlng = [p.coords.latitude, p.coords.longitude];
+        setPos(latlng);
+        map.setView(latlng, zoom, { animate: true });
+      },
+      (err) => {
+        console.warn("Geolocation Fehler:", err);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 8000,
+        maximumAge: 0,
+      },
+    );
+  }, [map, zoom]);
+};
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
@@ -108,15 +142,16 @@ const HomePage = () => {
       <Block strong inset style={{ padding: 0 }}>
         <div style={{ height: "60vh", width: "100%" }}>
           <MapContainer
-            center={[51.505, -0.09]}
+            center={[0, 0]}
             zoom={13}
-            scrollWheelZoom={false}
+            scrollWheelZoom
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              attribution="&copy; OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <CenterOnLoad zoom={13} showMarker />
           </MapContainer>
         </div>
       </Block>
