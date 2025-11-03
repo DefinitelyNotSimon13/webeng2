@@ -19,15 +19,15 @@
 
 - Marius
 - Not done, will be added to next sprint
-- Should be done ASAP - blocking 
+- Should be done ASAP - blocking
 
 ### basic ui structure (#5)
 
 - Max
 - Merged and accepted
 - Possible adjustments within the next sprints
-    - Make lat/long selection available via secondary fab
-    - Possibly extract popup into its own component
+  - Make lat/long selection available via secondary fab
+  - Possibly extract popup into its own component
 
 ### nearby poi list view (#12)
 
