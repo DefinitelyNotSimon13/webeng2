@@ -106,9 +106,9 @@ const HomePage = () => {
 
       <Block strong inset>
         <Map
-          initialCenter={null ?? { lat: 0, lng: 0 }}
+          initialCenter={useState(null) ?? { lat: 0, lng: 0 }}
           initialZoom={13}
-          autoLocate={!null}
+          autoLocate={!useState(null)}
         />
       </Block>
 
