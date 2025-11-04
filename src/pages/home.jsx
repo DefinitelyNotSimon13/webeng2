@@ -30,7 +30,7 @@ const HomePage = () => {
         <NavRight>
           <Link
             iconIos="f7:doc"
-            iconMd="material:descescription"
+            iconMd="material:description"
             openIn="sheet"
             href="/about/"
           />
