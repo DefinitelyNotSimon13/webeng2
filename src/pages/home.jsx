@@ -12,7 +12,7 @@ import {
   Segmented,
 } from "framework7-react";
 import "leaflet/dist/leaflet.css";
-import Map from "../../src/pages/Map.jsx";
+import Map from "../../src/components/Map.jsx";
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
