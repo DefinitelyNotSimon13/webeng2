@@ -1,0 +1,17 @@
+.settings-block {
+  margin: 10px;
+  padding: 10px;
+}
+
+.settings-group-list {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  p {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    padding: 0;
+  }
+  --f7-list-item-padding-horizontal: 10px;
+  --f7-list-in-list-padding-left: 0;
+}

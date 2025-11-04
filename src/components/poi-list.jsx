@@ -42,10 +42,10 @@ const PoiList = (props) => {
 
 PoiList.propTypes = {
   items: PropTypes.arrayOf({
-    title: PropTypes.string(),
-    description: PropTypes.string(),
-    image: PropTypes.string(),
-    link: PropTypes.string(),
+    title: PropTypes.string,
+    description: PropTypes.string,
+    image: PropTypes.string,
+    link: PropTypes.string,
   }).isRequired,
 };
 
