@@ -11,7 +11,6 @@ import {
   ListInput,
   Segmented,
 } from "framework7-react";
-import "leaflet/dist/leaflet.css";
 import Map from "../../src/components/Map.jsx";
 
 const HomePage = () => {
@@ -23,9 +22,6 @@ const HomePage = () => {
   const handleSearch = () => {
     console.log("Search coords:", { lat, latHem, lng, lngHem });
   };
-
-  const [searchCenter] = useState(null);
-  const [zoom] = useState(13);
 
   return (
     <Page name="home">
@@ -110,9 +106,9 @@ const HomePage = () => {
 
       <Block strong inset>
         <Map
-          initialCenter={searchCenter ?? { lat: 0, lng: 0 }}
-          initialZoom={zoom}
-          autoLocate={!searchCenter}
+          initialCenter={null ?? { lat: 0, lng: 0 }}
+          initialZoom={13}
+          autoLocate={!null}
         />
       </Block>
 

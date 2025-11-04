@@ -1,6 +1,7 @@
 .map-wrapper {
-  height: 60vh;
+  height: calc(80vh - var(--f7-navbar-height) - var(--f7-toolbar-height, 0px) - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   width: 100%;
+  min-height: 60vh;
 }
 
 .map-container {
@@ -8,7 +9,6 @@
   width: 100%;
 }
 
-/* optional, hilft bei leeren Tiles kurzzeitig */
 .leaflet-container {
   background: #f5f5f5;
 }
