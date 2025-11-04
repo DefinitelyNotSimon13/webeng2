@@ -1,0 +1,14 @@
+.map-wrapper {
+  height: 60vh;
+  width: 100%;
+}
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* optional, hilft bei leeren Tiles kurzzeitig */
+.leaflet-container {
+  background: #f5f5f5;
+}

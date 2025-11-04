@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Page,
   Navbar,
@@ -12,35 +12,7 @@ import {
   Segmented,
 } from "framework7-react";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import { useEffect, useState } from "react";
-
-const CenterOnLoad = ({ zoom = 20 }) => {
-  const map = useMap();
-  const [pos, setPos] = useState(null);
-
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      console.warn("Geolocation nicht verfügbar");
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (p) => {
-        const latlng = [p.coords.latitude, p.coords.longitude];
-        setPos(latlng);
-        map.setView(latlng, zoom, { animate: true });
-      },
-      (err) => {
-        console.warn("Geolocation Fehler:", err);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 8000,
-        maximumAge: 0,
-      },
-    );
-  }, [map, zoom]);
-};
+import Map from "../../src/pages/Map.jsx";
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
@@ -51,6 +23,9 @@ const HomePage = () => {
   const handleSearch = () => {
     console.log("Search coords:", { lat, latHem, lng, lngHem });
   };
+
+  const [searchCenter] = useState(null);
+  const [zoom] = useState(13);
 
   return (
     <Page name="home">
@@ -133,21 +108,12 @@ const HomePage = () => {
         </div>
       </Block>
 
-      <Block strong inset style={{ padding: 0 }}>
-        <div style={{ height: "60vh", width: "100%" }}>
-          <MapContainer
-            center={[0, 0]}
-            zoom={13}
-            scrollWheelZoom
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer
-              attribution="&copy; OpenStreetMap contributors"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <CenterOnLoad zoom={13} showMarker />
-          </MapContainer>
-        </div>
+      <Block strong inset>
+        <Map
+          initialCenter={searchCenter ?? { lat: 0, lng: 0 }}
+          initialZoom={zoom}
+          autoLocate={!searchCenter}
+        />
       </Block>
 
       <Button className="poi-fab" fill popupOpen="#POI-list" small>
