@@ -1,4 +1,4 @@
-const WIKI_DEFAULT_LANG = "de";
+const WIKI_DEFAULT_LANG = "en";
 const WIKI_DEFAULT_RADIUS = 1000;
 
 export class ValidationError extends Error {
@@ -19,26 +19,26 @@ function validateParams({ lat, lon, radius, lang }) {
   const errors = [];
 
   if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
-    errors.push("lat muss in [-90, 90] liegen");
+    errors.push("lat must be in range [-90, 90]");
   }
 
   if (!Number.isFinite(lon) || lon < -180 || lon > 180) {
-    errors.push("lon muss in [-180, 180] liegen");
+    errors.push("lon must be in range [-180, 180]");
   }
 
   const r = radius ?? WIKI_DEFAULT_RADIUS;
   if (!Number.isFinite(r) || r <= 0) {
-    errors.push("radius muss > 0 sein");
+    errors.push("radius must be > 0");
   }
 
   const langValue = lang ?? WIKI_DEFAULT_LANG;
   const l = (langValue ? langValue : "").toString().toLowerCase();
   if (!/^[a-z]{2,3}$/.test(l)) {
-    errors.push('lang muss ein ISO-Sprachcode wie "de" oder "en" sein');
+    errors.push('lang must be an ISO language code like "de" or "en"');
   }
 
   if (errors.length) {
-    throw new ValidationError(`Ungültige Parameter: ${errors.join("; ")}`);
+    throw new ValidationError(`Invalid parameters: ${errors.join("; ")}`);
   }
 
   return { lat, lon, radius: Math.floor(r), lang: l };
@@ -48,7 +48,7 @@ function buildQueryString(params) {
   return new URLSearchParams(params).toString();
 }
 
-export async function fetchNearby({ lat, lon, radius, lang } = {}) {
+export async function fetchNearby({ lat, lon, radius, lang, signal } = {}) {
   const validated = validateParams({ lat, lon, radius, lang });
   const endpoint = `https://${validated.lang}.wikipedia.org/w/api.php`;
 
@@ -62,10 +62,10 @@ export async function fetchNearby({ lat, lon, radius, lang } = {}) {
     origin: "*",
   })}`;
 
-  const geoResponse = await fetch(geoUrl);
+  const geoResponse = await fetch(geoUrl, { signal });
   if (!geoResponse.ok) {
     throw new ApiError(
-      `Wikipedia API Fehler: ${geoResponse.status} ${geoResponse.statusText}`,
+      `Wikipedia API error: ${geoResponse.status} ${geoResponse.statusText}`,
     );
   }
 
@@ -91,10 +91,10 @@ export async function fetchNearby({ lat, lon, radius, lang } = {}) {
     origin: "*",
   })}`;
 
-  const detailsResponse = await fetch(detailsUrl);
+  const detailsResponse = await fetch(detailsUrl, { signal });
   if (!detailsResponse.ok) {
     throw new ApiError(
-      `Wikipedia API Fehler: ${detailsResponse.status} ${detailsResponse.statusText}`,
+      `Wikipedia API error: ${detailsResponse.status} ${detailsResponse.statusText}`,
     );
   }
 

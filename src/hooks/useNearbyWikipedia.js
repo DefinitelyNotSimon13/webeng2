@@ -8,14 +8,20 @@ export function useNearbyWikipedia({ center, radius, lang }) {
 
   useEffect(() => {
     if (
-      !center ||
+      center === undefined ||
       !Number.isFinite(center.lat) ||
       !Number.isFinite(center.lon)
     ) {
+      console.error("Invalid center coordinates:", center);
       return;
     }
 
-    let cancelled = false;
+    if (radius < 10 || radius > 10000) {
+      console.error("Radius out of bounds (10-10000):", radius);
+      return;
+    }
+
+    const abortController = new AbortController();
 
     async function loadPois() {
       setLoading(true);
@@ -28,32 +34,33 @@ export function useNearbyWikipedia({ center, radius, lang }) {
           lon: center.lon,
           radius,
           lang,
+          signal: abortController.signal,
         });
 
-        if (!cancelled) {
-          setLoading(false);
-          setData(pois);
-        }
+        setLoading(false);
+        setData(pois);
       } catch (err) {
-        if (!cancelled) {
-          const errorMessage =
-            err instanceof Error
-              ? err.message
-              : "Unbekannter Fehler beim Laden der POIs";
-
-          setLoading(false);
-          setError(errorMessage);
-          setData([]);
+        if (err.name === "AbortError") {
+          return;
         }
+
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Unknown error while loading POIs";
+
+        setLoading(false);
+        setError(errorMessage);
+        setData([]);
       }
     }
 
-    void loadPois();
+    (async () => await loadPois())();
 
     return () => {
-      cancelled = true;
+      abortController.abort();
     };
   }, [center?.lat, center?.lon, radius, lang]);
 
-  return { loading, error, data };
+  return [loading, error, data];
 }
