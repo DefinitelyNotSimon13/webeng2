@@ -124,9 +124,6 @@ function renderTextOption(text, currentValue, updateSetting) {
   console.log(text);
   console.log(currentValue);
   const [value, setValue] = useState(currentValue);
-  const onTextChange = (e) => {
-    console.log("Val:", e.target.value);
-  };
   return (
     <ListInput
       key={text.id}
