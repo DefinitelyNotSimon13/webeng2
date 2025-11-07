@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Page,
   Navbar,
@@ -8,21 +8,15 @@ import {
   Link,
   Block,
   Button,
-  List,
-  ListInput,
-  Segmented,
+  Popup,
 } from "framework7-react";
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
+import CoordPicker from "../components/coordPicker";
 
 const HomePage = () => {
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [latHem, setLatHem] = useState("N");
-  const [lngHem, setLngHem] = useState("O");
-
-  const handleSearch = () => {
-    console.log("Search coords:", { lat, latHem, lng, lngHem });
+  const handleSearch = (coords) => {
+    console.log("Search coords:", coords);
   };
 
   return (
@@ -48,77 +42,23 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <Block className="coord-box">
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lat"
-              type="text"
-              placeholder="Latitude"
-              value={lat}
-              onInput={(e) => setLat(e.target.value)}
-              clearButton
-            />
-          </List>
+      <Button className="coord-fab" fill popupOpen="#coord-popup" small>
+        Coord
+      </Button>
 
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={latHem === "N"}
-                onClick={() => setLatHem("N")}
-              >
-                N
-              </Button>
-              <Button
-                small
-                active={latHem === "S"}
-                onClick={() => setLatHem("S")}
-              >
-                S
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lng"
-              type="text"
-              placeholder="Longitude"
-              value={lng}
-              onInput={(e) => setLng(e.target.value)}
-              clearButton
-            />
-          </List>
-
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={lngHem === "O"}
-                onClick={() => setLngHem("O")}
-              >
-                O
-              </Button>
-              <Button
-                small
-                active={lngHem === "W"}
-                onClick={() => setLngHem("W")}
-              >
-                W
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-actions">
-          <Button className="coord-search" fill onClick={handleSearch}>
-            Search
-          </Button>
-        </div>
-      </Block>
+      <Popup id="coord-popup">
+        <Page>
+          <Navbar>
+            <NavLeft>
+              <Link iconIos="f7:close" iconMd="material:close" popupClose />
+            </NavLeft>
+            <NavTitle>Koordinaten</NavTitle>
+          </Navbar>
+          <Block>
+            <CoordPicker onSearch={handleSearch} />
+          </Block>
+        </Page>
+      </Popup>
 
       <Block strong inset>
         <Map
