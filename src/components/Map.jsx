@@ -1,9 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { useGeolocation } from "../hooks/useGeoLocation.js";
 import "../css/map.css";
+
+function AutoLocateOnce({ pos, zoom }) {
+  const map = useMap();
+  const jumped = React.useRef(false);
+
+  // nach dem Mount einmal neu layouten
+  React.useEffect(() => {
+    map.invalidateSize();
+  }, [map]);
+
+  // sobald Position da ist genau einmal springen
+  React.useEffect(() => {
+    if (!pos || jumped.current) return;
+    const la = Number(pos.lat);
+    const lg = Number(pos.lng);
+    if (Number.isFinite(la) && Number.isFinite(lg)) {
+      jumped.current = true;
+      map.setView([la, lg], typeof zoom === "number" ? zoom : map.getZoom(), {
+        animate: true,
+      });
+    }
+  }, [map, pos, zoom]);
+
+  return null;
+}
+
+function InvalidateOnResize({ observeEl }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!observeEl) return;
+    const ro = new ResizeObserver(() => map.invalidateSize());
+    ro.observe(observeEl);
+    // einmal nach dem nächsten Paint
+    requestAnimationFrame(() => map.invalidateSize());
+    return () => ro.disconnect();
+  }, [map, observeEl]);
+  return null;
+}
 
 function MapViewUpdater({ center, zoom }) {
   const map = useMap();
@@ -29,7 +67,7 @@ MapViewUpdater.propTypes = {
 };
 
 export default function Map({
-  initialCenter = { lat: 0, lng: 0 },
+  initialCenter = { lat: 47.651, lng: 9.479 },
   initialZoom = 13,
   autoLocate = true,
   geoOptions,
@@ -47,10 +85,12 @@ export default function Map({
 
   const center = autoLocate && position ? position : initialCenter;
 
+  const wrapperRef = useRef(null);
+
   return (
-    <div className="map-wrapper">
+    <div className="map-wrapper" ref={wrapperRef}>
       <MapContainer
-        center={[center.lat, center.lng]}
+        center={[center.lat, center.lng]} // oder dein Tuple
         zoom={initialZoom}
         scrollWheelZoom
         className="map-container"
@@ -59,8 +99,8 @@ export default function Map({
           attribution="© OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        <MapViewUpdater center={center} zoom={initialZoom} />
+        <InvalidateOnResize observeEl={wrapperRef.current} />
+        {autoLocate && <AutoLocateOnce pos={position} zoom={initialZoom} />}
       </MapContainer>
     </div>
   );

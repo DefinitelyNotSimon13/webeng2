@@ -106,9 +106,9 @@ const HomePage = () => {
 
       <Block strong inset>
         <Map
-          initialCenter={useState(null) ?? { lat: 0, lng: 0 }}
+          initialCenter={{ lat: 47.651, lng: 9.479 }}
           initialZoom={13}
-          autoLocate={!useState(null)}
+          autoLocate={true}
         />
       </Block>
 
@@ -118,4 +118,5 @@ const HomePage = () => {
     </Page>
   );
 };
+
 export default HomePage;
