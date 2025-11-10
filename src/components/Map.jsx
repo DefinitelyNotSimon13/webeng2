@@ -45,7 +45,7 @@ export default function Map({
     },
   );
 
-  const center = autoLocate  && position ? position : initialCenter;
+  const center = autoLocate && position ? position : initialCenter;
 
   return (
     <div className="map-wrapper">

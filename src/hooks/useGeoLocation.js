@@ -15,7 +15,7 @@ function distanceMeters(a, b) {
 
 export function useGeolocation(options = {}) {
   const {
-   enableHighAccuracy = true,
+    enableHighAccuracy = true,
     timeout = 8000,
     maximumAge = 0,
     refreshMs = 0,
@@ -46,7 +46,7 @@ export function useGeolocation(options = {}) {
         if (d < minDistance) return;
       }
       lastPosRef.current = next;
-     setPosition(next);
+      setPosition(next);
     };
 
     const onSuccess = (p) => {
@@ -70,7 +70,7 @@ export function useGeolocation(options = {}) {
     } else {
       watcherId.current = navigator.geolocation.watchPosition(
         onSuccess,
-       onError,
+        onError,
         geoOpts,
       );
     }
@@ -84,7 +84,7 @@ export function useGeolocation(options = {}) {
 
     return () => {
       document.removeEventListener("visibilitychange", onVis);
-     if (watcherId.current !== null) {
+      if (watcherId.current !== null) {
         navigator.geolocation.clearWatch(watcherId.current);
         watcherId.current = null;
       }
@@ -102,5 +102,9 @@ export function useGeolocation(options = {}) {
     minDistance,
   ]);
 
-    return { position, error, supported: typeof navigator !== "undefined" && !!navigator.geolocation };
+  return {
+    position,
+    error,
+    supported: typeof navigator !== "undefined" && !!navigator.geolocation,
+  };
 }
