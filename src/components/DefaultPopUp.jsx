@@ -5,9 +5,10 @@ import {
   Popup,
   Page,
   Navbar,
-  NavRight,
+  NavLeft,
   Link,
   Block,
+  NavTitle,
 } from "framework7-react";
 import PropTypes from "prop-types";
 
@@ -16,10 +17,11 @@ const DefaultPopUp = ({ children, id, title }) => {
     <Popup id={id}>
       <View>
         <Page>
-          <Navbar title={title}>
-            <NavRight>
-              <Link popupClose>Close</Link>
-            </NavRight>
+          <Navbar>
+            <NavLeft>
+              <Link iconIos="f7:close" iconMd="material:close" popupClose />
+            </NavLeft>
+            <NavTitle>{title}</NavTitle>
           </Navbar>
           <Block>{children}</Block>
         </Page>

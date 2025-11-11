@@ -28,8 +28,8 @@ const HomePage = () => {
       <Navbar>
         <NavRight>
           <Link
-            iconIos="f7:doc"
-            iconMd="material:description"
+            iconIos="f7:info_circle"
+            iconMd="material:info"
             openIn="sheet"
             href="/about/"
           />
