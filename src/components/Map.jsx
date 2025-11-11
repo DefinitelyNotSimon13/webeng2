@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
@@ -7,15 +7,13 @@ import "../css/map.css";
 
 function AutoLocateOnce({ pos, zoom }) {
   const map = useMap();
-  const jumped = React.useRef(false);
+  const jumped = useRef(false);
 
-  // nach dem Mount einmal neu layouten
-  React.useEffect(() => {
+  useEffect(() => {
     map.invalidateSize();
   }, [map]);
 
-  // sobald Position da ist genau einmal springen
-  React.useEffect(() => {
+  useEffect(() => {
     if (!pos || jumped.current) return;
     const la = Number(pos.lat);
     const lg = Number(pos.lng);
@@ -30,18 +28,29 @@ function AutoLocateOnce({ pos, zoom }) {
   return null;
 }
 
+AutoLocateOnce.propTypes = {
+  pos: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number,
+  }),
+  zoom: PropTypes.number,
+};
+
 function InvalidateOnResize({ observeEl }) {
   const map = useMap();
   useEffect(() => {
     if (!observeEl) return;
     const ro = new ResizeObserver(() => map.invalidateSize());
     ro.observe(observeEl);
-    // einmal nach dem nächsten Paint
     requestAnimationFrame(() => map.invalidateSize());
     return () => ro.disconnect();
   }, [map, observeEl]);
   return null;
 }
+
+InvalidateOnResize.propTypes = {
+  observeEl: PropTypes.any,
+};
 
 function MapViewUpdater({ center, zoom }) {
   const map = useMap();
