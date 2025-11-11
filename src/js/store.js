@@ -1,37 +1,37 @@
 import { createStore } from "framework7/lite";
+import { SettingsHelper } from "../components/settings";
 
 const store = createStore({
   state: {
-    products: [
-      {
-        id: "1",
-        title: "Apple iPhone 8",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi tempora similique reiciendis, error nesciunt vero, blanditiis pariatur dolor, minima sed sapiente rerum, dolorem corrupti hic modi praesentium unde saepe perspiciatis.",
-      },
-      {
-        id: "2",
-        title: "Apple iPhone 8 Plus",
-        description:
-          "Velit odit autem modi saepe ratione totam minus, aperiam, labore quia provident temporibus quasi est ut aliquid blanditiis beatae suscipit odio vel! Nostrum porro sunt sint eveniet maiores, dolorem itaque!",
-      },
-      {
-        id: "3",
-        title: "Apple iPhone X",
-        description:
-          "Expedita sequi perferendis quod illum pariatur aliquam, alias laboriosam! Vero blanditiis placeat, mollitia necessitatibus reprehenderit. Labore dolores amet quos, accusamus earum asperiores officiis assumenda optio architecto quia neque, quae eum.",
-      },
-    ],
+    settings: [],
   },
   getters: {
-    products({ state }) {
-      return state.products;
+    settings({ state }) {
+      return state.settings;
     },
   },
   actions: {
-    addProduct({ state }, product) {
-      state.products = [...state.products, product];
+    loadSettings({ state }, config) {
+      console.debug("[store] loadSettings action called");
+      state.settings = SettingsHelper.fromLocalStorage();
+      store.dispatch("ensureDefaults", config);
+    },
+    ensureDefaults({ state }, config) {
+      console.debug("[store] ensureDefaults action called");
+      const next = { ...state.settings };
+      for (const s of SettingsHelper.iterSettings(config)) {
+        if (!Object.hasOwn(next, s.id)) {
+          next[s.id] = s.default;
+        }
+      }
+      state.settings = next;
+      SettingsHelper.saveToLocalStorage(state.settings);
+    },
+    setSetting({ state }, { id, value }) {
+      state.settings = { ...state.settings, [id]: value };
+      SettingsHelper.saveToLocalStorage(state.settings);
     },
   },
 });
+
 export default store;

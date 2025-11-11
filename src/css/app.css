@@ -1,3 +1,13 @@
+:root {
+  --f7-panel-width: 400px;
+}
+
+@media (max-width: 420px) {
+  :root {
+    --f7-panel-width: 90vw;
+  }
+}
+
 .poi-fab {
   position: fixed;
   right: 16px;
@@ -83,4 +93,10 @@
   .coord-actions .coord-search {
     font-size: 14px;
   }
+}
+
+.nav-icon {
+  width: 30px;
+  height: 30px;
+  padding: 10px;
 }
