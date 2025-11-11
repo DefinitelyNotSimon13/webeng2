@@ -1,13 +1,6 @@
 import React from "react";
 
-import {
-  f7ready,
-  App,
-  View,
-  Page,
-  Navbar,
-  Block,
-} from "framework7-react";
+import { f7ready, App, View } from "framework7-react";
 
 import routes from "../js/routes";
 import store from "../js/store";
