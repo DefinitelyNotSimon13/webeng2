@@ -13,6 +13,7 @@ import {
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
 import CoordPicker from "../components/coordPicker";
+import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 
 const HomePage = () => {
   const handleSearch = (coords) => {
@@ -46,19 +47,9 @@ const HomePage = () => {
         Coord
       </Button>
 
-      <Popup id="coord-popup">
-        <Page>
-          <Navbar>
-            <NavLeft>
-              <Link iconIos="f7:close" iconMd="material:close" popupClose />
-            </NavLeft>
-            <NavTitle>Koordinaten</NavTitle>
-          </Navbar>
-          <Block>
-            <CoordPicker onSearch={handleSearch} />
-          </Block>
-        </Page>
-      </Popup>
+      <SmallPopup id="coord-popup" title="CHANGEMEEE">
+        <CoordPicker onSearch={handleSearch} />
+      </SmallPopup>
 
       <Block strong inset>
         <Map
