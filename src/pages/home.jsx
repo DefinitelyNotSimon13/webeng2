@@ -15,7 +15,6 @@ import {
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
 
-
 const HomePage = () => {
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
