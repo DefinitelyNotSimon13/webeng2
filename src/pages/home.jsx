@@ -11,6 +11,7 @@ import {
   ListInput,
   Segmented,
 } from "framework7-react";
+import Map from "../../src/components/Map.jsx";
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
@@ -103,8 +104,12 @@ const HomePage = () => {
         </div>
       </Block>
 
-      <Block>
-        <p>Map here</p>
+      <Block strong inset>
+        <Map
+          initialCenter={{ lat: 47.651, lng: 9.479 }}
+          initialZoom={13}
+          autoLocate={true}
+        />
       </Block>
 
       <Button className="poi-fab" fill popupOpen="#POI-list" small>
@@ -113,4 +118,5 @@ const HomePage = () => {
     </Page>
   );
 };
+
 export default HomePage;
