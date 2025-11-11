@@ -1,13 +1,6 @@
 import React from "react";
 import "../css/poi-list.css";
-import {
-  Block,
-  BlockTitle,
-  Card,
-  CardContent,
-  CardHeader,
-  Link,
-} from "framework7-react";
+import { Block, Card, CardContent, CardHeader, Link } from "framework7-react";
 import PropTypes from "prop-types";
 
 /* Component for listing
@@ -17,7 +10,6 @@ const PoiList = (props) => {
   const { items } = props;
   return (
     <Block>
-      <BlockTitle>Nearby Points of Interest</BlockTitle>
       {items.map((item, index) => (
         <Card key={index}>
           <CardHeader>{item.title}</CardHeader>

@@ -4,17 +4,18 @@ import {
   f7ready,
   App,
   View,
-  Popup,
   Page,
   Navbar,
-  NavRight,
-  Link,
   Block,
 } from "framework7-react";
 
 import routes from "../js/routes";
 import store from "../js/store";
+
 import { SETTINGS_CONFIG } from "./settings";
+
+import PoiList from "./poi-list";
+import DefaultPopUp from "./DefaultPopUp";
 
 const MyApp = () => {
   const f7params = {
@@ -44,20 +45,26 @@ const MyApp = () => {
       <View main className="safe-areas" url="/"></View>
 
       {/* Popup */}
-      <Popup id="POI-list">
-        <View>
-          <Page>
-            <Navbar title="POI List">
-              <NavRight>
-                <Link popupClose>Close</Link>
-              </NavRight>
-            </Navbar>
-            <Block>
-              <p>POI list here.</p>
-            </Block>
-          </Page>
-        </View>
-      </Popup>
+      <DefaultPopUp id="POI-list" title="Nearby Points of Interest">
+        <PoiList
+          items={[
+            {
+              title: "POI 1",
+              description: "Description for POI 1",
+              image:
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg/250px-TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg",
+              link: "https://google.com",
+            },
+            {
+              title: "POI 1",
+              description: "Description for POI 1",
+              image:
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg/250px-TestingCup-Polish-Championship-in-Software-Testing-Katowice-2016.jpg",
+              link: "https://google.com",
+            },
+          ]}
+        />
+      </DefaultPopUp>
     </App>
   );
 };
