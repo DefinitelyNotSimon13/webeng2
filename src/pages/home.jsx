@@ -13,6 +13,8 @@ import {
   Segmented,
 } from "framework7-react";
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
+import Map from "../../src/components/Map.jsx";
+
 
 const HomePage = () => {
   const [lat, setLat] = useState("");
@@ -119,8 +121,12 @@ const HomePage = () => {
         </div>
       </Block>
 
-      <Block>
-        <p>Map here</p>
+      <Block strong inset>
+        <Map
+          initialCenter={{ lat: 47.651, lng: 9.479 }}
+          initialZoom={13}
+          autoLocate={true}
+        />
       </Block>
 
       <ExampleSettingsUsage />
@@ -131,4 +137,5 @@ const HomePage = () => {
     </Page>
   );
 };
+
 export default HomePage;
