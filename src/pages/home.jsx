@@ -22,17 +22,16 @@ import CoordPicker from "../components/coordPicker";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 
 function parseCoord(valueStr, hemisphere, isLat) {
-  if (!valueStr) return null;
-  const v = Number(String(valueStr).replace(",", "."));
+  const v = Number(
+    String(valueStr ?? "")
+      .trim()
+      .replace(",", "."),
+  );
   if (!Number.isFinite(v)) return null;
-
   const abs = Math.abs(v);
   const max = isLat ? 90 : 180;
   if (abs > max) return null;
-
-  if (isLat) {
-    return hemisphere === "S" ? -abs : abs;
-  }
+  if (isLat) return hemisphere === "S" ? -abs : abs;
   return hemisphere === "W" ? -abs : abs;
 }
 
@@ -41,22 +40,21 @@ const HomePage = () => {
   const [lng, setLng] = useState("");
   const [latHem, setLatHem] = useState("N");
   const [lngHem, setLngHem] = useState("O");
-
+  const [markerPos, setMarkerPos] = useState(null);
   const [targetCenter, setTargetCenter] = useState(null);
   const [targetZoom, setTargetZoom] = useState(13);
 
-  const handleSearch = () => {
-    const latNum = parseCoord(lat, latHem, true);
-    const lngNum = parseCoord(lng, lngHem, false);
-
-    if (latNum == null || lngNum == null) {
-      console.warn("Ungueltige Koordinaten");
+  const handleSearch = (e) => {
+    e?.preventDefault?.();
+    const la = parseCoord(lat, latHem, true);
+    const lg = parseCoord(lng, lngHem, false);
+    if (la == null || lg == null) {
+      console.warn("Ungültige Koordinaten");
       return;
     }
-
-    setTargetCenter({ lat: latNum, lng: lngNum });
+    setTargetCenter({ lat: la, lng: lg });
     setTargetZoom((z) => Math.max(z, 14));
-    console.log("Search coords:", { lat: latNum, lng: lngNum });
+    setMarkerPos({ lat: la, lng: lg });
   };
 
   return (
@@ -86,8 +84,7 @@ const HomePage = () => {
         initialCenter={{ lat: 47.651, lng: 9.479 }}
         initialZoom={13}
         autoLocate={true}
-        centerOverride={targetCenter}
-        zoomOverride={targetZoom}
+        markerPosition={markerPos}
       />
 
       <Block className="coord-box">
@@ -165,6 +162,16 @@ const HomePage = () => {
       <SmallPopup id="coord-popup" title="Insert Coordinates">
         <CoordPicker onSearch={handleSearch} />
       </SmallPopup>
+
+      <Map
+        initialCenter={{ lat: 47.651, lng: 9.479 }}
+        initialZoom={13}
+        autoLocate={true}
+        centerOverride={targetCenter}
+        zoomOverride={targetZoom}
+        markerPosition={markerPos}
+      />
+
 
       <Fab position="right-bottom" slot="fixed">
         <Icon ios="f7:placemark_fill" md="material:location_pin" />

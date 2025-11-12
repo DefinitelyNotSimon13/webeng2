@@ -1,9 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
 import { useGeolocation } from "../hooks/useGeoLocation.js";
 import "../css/Map.css";
+import L from "leaflet";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 function AutoLocateOnce({ pos, zoom }) {
   const map = useMap();
@@ -82,6 +93,7 @@ export default function Map({
   geoOptions,
   centerOverride,
   zoomOverride,
+  markerPosition,
 }) {
   const { position } = useGeolocation(
     geoOptions ?? {
@@ -101,7 +113,7 @@ export default function Map({
   return (
     <div className="map-wrapper" ref={wrapperRef}>
       <MapContainer
-        center={[center.lat, center.lng]} // oder dein Tuple
+        center={[center.lat, center.lng]}
         zoom={initialZoom}
         scrollWheelZoom
         className="map-container"
@@ -115,6 +127,13 @@ export default function Map({
 
         {centerOverride && (
           <MapViewUpdater center={centerOverride} zoom={zoomOverride} />
+        )}
+        {markerPosition && (
+          <Marker position={[markerPosition.lat, markerPosition.lng]}>
+            <Popup>
+              {markerPosition.lat.toFixed(5)}, {markerPosition.lng.toFixed(5)}
+            </Popup>
+          </Marker>
         )}
       </MapContainer>
     </div>
@@ -135,5 +154,14 @@ Map.propTypes = {
     refreshMs: PropTypes.number,
     strategy: PropTypes.oneOf(["auto", "poll", "watch"]),
     minDistance: PropTypes.number,
+  }),
+  centerOverride: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number,
+  }),
+  zoomOverride: PropTypes.number,
+  markerPosition: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number,
   }),
 };
