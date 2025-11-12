@@ -80,6 +80,8 @@ export default function Map({
   initialZoom = 13,
   autoLocate = true,
   geoOptions,
+  centerOverride,
+  zoomOverride,
 }) {
   const { position } = useGeolocation(
     geoOptions ?? {
@@ -110,6 +112,10 @@ export default function Map({
         />
         <InvalidateOnResize observeEl={wrapperRef.current} />
         {autoLocate && <AutoLocateOnce pos={position} zoom={initialZoom} />}
+
+        {centerOverride && (
+          <MapViewUpdater center={centerOverride} zoom={zoomOverride} />
+        )}
       </MapContainer>
     </div>
   );

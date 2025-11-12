@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import {
   Page,
   Navbar,
@@ -18,9 +18,42 @@ import Map from "../../src/components/Map.jsx";
 import CoordPicker from "../components/coordPicker";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 
+function parseCoord(valueStr, hemisphere, isLat) {
+  if (!valueStr) return null;
+  const v = Number(String(valueStr).replace(",", "."));
+  if (!Number.isFinite(v)) return null;
+
+  const abs = Math.abs(v);
+  const max = isLat ? 90 : 180;
+  if (abs > max) return null;
+
+  if (isLat) {
+    return hemisphere === "S" ? -abs : abs;
+  }
+  return hemisphere === "W" ? -abs : abs;
+}
+
 const HomePage = () => {
-  const handleSearch = (coords) => {
-    console.log("Search coords:", coords);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [latHem, setLatHem] = useState("N");
+  const [lngHem, setLngHem] = useState("O");
+
+  const [targetCenter, setTargetCenter] = useState(null);
+  const [targetZoom, setTargetZoom] = useState(13);
+
+  const handleSearch = () => {
+    const latNum = parseCoord(lat, latHem, true);
+    const lngNum = parseCoord(lng, lngHem, false);
+
+    if (latNum == null || lngNum == null) {
+      console.warn("Ungueltige Koordinaten");
+      return;
+    }
+
+    setTargetCenter({ lat: latNum, lng: lngNum });
+    setTargetZoom((z) => Math.max(z, 14));
+    console.log("Search coords:", { lat: latNum, lng: lngNum });
   };
 
   return (
@@ -55,6 +88,8 @@ const HomePage = () => {
           initialCenter={{ lat: 47.651, lng: 9.479 }}
           initialZoom={13}
           autoLocate={true}
+          centerOverride={targetCenter}
+          zoomOverride={targetZoom}
         />
       </Block>
 
