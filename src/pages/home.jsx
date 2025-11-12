@@ -7,8 +7,11 @@ import {
   NavTitle,
   Link,
   Block,
-  Button,
-  Popup,
+  Icon,
+  Fab,
+  FabButton,
+  FabButtons,
+  f7,
 } from "framework7-react";
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
@@ -43,11 +46,7 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <Button className="coord-fab" fill popupOpen="#coord-popup" small>
-        Coord
-      </Button>
-
-      <SmallPopup id="coord-popup" title="CHANGEMEEE">
+      <SmallPopup id="coord-popup" title="Insert Coordinates">
         <CoordPicker onSearch={handleSearch} />
       </SmallPopup>
 
@@ -61,9 +60,28 @@ const HomePage = () => {
 
       <ExampleSettingsUsage />
 
-      <Button className="poi-fab" fill popupOpen="#POI-list" small>
-        POIs
-      </Button>
+      <Fab position="right-bottom" slot="fixed">
+        <Icon ios="f7:placemark_fill" md="material:location_pin" />
+        <Icon ios="f7:xmark" md="material:close" />
+        <FabButtons position="top">
+          <FabButton
+            label="POIs"
+            onClick={() => {
+              f7.popup.open("#POI-list");
+            }}
+          >
+            <Icon ios="f7:compass_fill" md="material:explore" />
+          </FabButton>
+          <FabButton
+            label="Insert Coordinates"
+            onClick={() => {
+              f7.popup.open("#coord-popup");
+            }}
+          >
+            <Icon ios="f7:globe" md="material:language" />
+          </FabButton>
+        </FabButtons>
+      </Fab>
     </Page>
   );
 };

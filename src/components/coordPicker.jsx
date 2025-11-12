@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/coordPicker.css";
 import { Block, List, ListInput, Segmented, Button } from "framework7-react";
+import PropTypes from "prop-types";
 
 const CoordPicker = ({ onSearch }) => {
   const [lat, setLat] = useState("");
@@ -78,12 +79,16 @@ const CoordPicker = ({ onSearch }) => {
       </div>
 
       <div className="coord-actions">
-        <Button className="coord-search" fill onClick={handleSearch}>
+        <Button className="coord-search" fill onClick={handleSearch} popupClose>
           Search
         </Button>
       </div>
     </Block>
   );
+};
+
+CoordPicker.propTypes = {
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default CoordPicker;
