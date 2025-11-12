@@ -1,15 +1,15 @@
 .map-wrapper {
-  height: calc(
-    80vh - var(--f7-navbar-height) - var(--f7-toolbar-height, 0px) -
-      env(safe-area-inset-top) - env(safe-area-inset-bottom)
-  );
-  width: 100%;
-  min-height: 60vh;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(var(--f7-navbar-height) + env(safe-area-inset-top));
+  bottom: 0;
+  z-index: 0;
 }
 
 .map-container {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 .leaflet-container {

@@ -1,19 +1,22 @@
 import { React, useState } from "react";
 import {
-  Page,
-  Navbar,
-  NavRight,
-  NavLeft,
-  NavTitle,
-  Link,
   Block,
-  Icon,
+  Button,
   Fab,
   FabButton,
+  ListInput,
   FabButtons,
+  Icon,
+  Link,
+  List,
+  NavLeft,
+  NavRight,
+  NavTitle,
+  Navbar,
+  Page,
+  Segmented,
   f7,
 } from "framework7-react";
-import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
 import CoordPicker from "../components/coordPicker";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
@@ -79,21 +82,89 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
+      <Map
+        initialCenter={{ lat: 47.651, lng: 9.479 }}
+        initialZoom={13}
+        autoLocate={true}
+        centerOverride={targetCenter}
+        zoomOverride={targetZoom}
+      />
+
+      <Block className="coord-box">
+        <div className="coord-pair">
+          <List className="coord-input-list" inset>
+            <ListInput
+              label="Lat"
+              type="text"
+              placeholder="Latitude"
+              value={lat}
+              onInput={(e) => setLat(e.target.value)}
+              clearButton
+            />
+          </List>
+
+          <div className="coord-seg">
+            <Segmented strong outlineIos>
+              <Button
+                small
+                active={latHem === "N"}
+                onClick={() => setLatHem("N")}
+              >
+                N
+              </Button>
+              <Button
+                small
+                active={latHem === "S"}
+                onClick={() => setLatHem("S")}
+              >
+                S
+              </Button>
+            </Segmented>
+          </div>
+        </div>
+
+        <div className="coord-pair">
+          <List className="coord-input-list" inset>
+            <ListInput
+              label="Lng"
+              type="text"
+              placeholder="Longitude"
+              value={lng}
+              onInput={(e) => setLng(e.target.value)}
+              clearButton
+            />
+          </List>
+
+          <div className="coord-seg">
+            <Segmented strong outlineIos>
+              <Button
+                small
+                active={lngHem === "O"}
+                onClick={() => setLngHem("O")}
+              >
+                O
+              </Button>
+              <Button
+                small
+                active={lngHem === "W"}
+                onClick={() => setLngHem("W")}
+              >
+                W
+              </Button>
+            </Segmented>
+          </div>
+        </div>
+
+        <div className="coord-actions">
+          <Button className="coord-search" fill onClick={handleSearch}>
+            Search
+          </Button>
+        </div>
+      </Block>
+
       <SmallPopup id="coord-popup" title="Insert Coordinates">
         <CoordPicker onSearch={handleSearch} />
       </SmallPopup>
-
-      <Block strong inset>
-        <Map
-          initialCenter={{ lat: 47.651, lng: 9.479 }}
-          initialZoom={13}
-          autoLocate={true}
-          centerOverride={targetCenter}
-          zoomOverride={targetZoom}
-        />
-      </Block>
-
-      <ExampleSettingsUsage />
 
       <Fab position="right-bottom" slot="fixed">
         <Icon ios="f7:placemark_fill" md="material:location_pin" />
