@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Page,
   Navbar,
@@ -7,22 +7,20 @@ import {
   NavTitle,
   Link,
   Block,
-  Button,
-  List,
-  ListInput,
-  Segmented,
+  Icon,
+  Fab,
+  FabButton,
+  FabButtons,
+  f7,
 } from "framework7-react";
 import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
 import Map from "../../src/components/Map.jsx";
+import CoordPicker from "../components/coordPicker";
+import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 
 const HomePage = () => {
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [latHem, setLatHem] = useState("N");
-  const [lngHem, setLngHem] = useState("O");
-
-  const handleSearch = () => {
-    console.log("Search coords:", { lat, latHem, lng, lngHem });
+  const handleSearch = (coords) => {
+    console.log("Search coords:", coords);
   };
 
   return (
@@ -48,77 +46,9 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <Block className="coord-box">
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lat"
-              type="text"
-              placeholder="Latitude"
-              value={lat}
-              onInput={(e) => setLat(e.target.value)}
-              clearButton
-            />
-          </List>
-
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={latHem === "N"}
-                onClick={() => setLatHem("N")}
-              >
-                N
-              </Button>
-              <Button
-                small
-                active={latHem === "S"}
-                onClick={() => setLatHem("S")}
-              >
-                S
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lng"
-              type="text"
-              placeholder="Longitude"
-              value={lng}
-              onInput={(e) => setLng(e.target.value)}
-              clearButton
-            />
-          </List>
-
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={lngHem === "O"}
-                onClick={() => setLngHem("O")}
-              >
-                O
-              </Button>
-              <Button
-                small
-                active={lngHem === "W"}
-                onClick={() => setLngHem("W")}
-              >
-                W
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-actions">
-          <Button className="coord-search" fill onClick={handleSearch}>
-            Search
-          </Button>
-        </div>
-      </Block>
+      <SmallPopup id="coord-popup" title="Insert Coordinates">
+        <CoordPicker onSearch={handleSearch} />
+      </SmallPopup>
 
       <Block strong inset>
         <Map
@@ -130,9 +60,28 @@ const HomePage = () => {
 
       <ExampleSettingsUsage />
 
-      <Button className="poi-fab" fill popupOpen="#POI-list" small>
-        POIs
-      </Button>
+      <Fab position="right-bottom" slot="fixed">
+        <Icon ios="f7:placemark_fill" md="material:location_pin" />
+        <Icon ios="f7:xmark" md="material:close" />
+        <FabButtons position="top">
+          <FabButton
+            label="POIs"
+            onClick={() => {
+              f7.popup.open("#POI-list");
+            }}
+          >
+            <Icon ios="f7:compass_fill" md="material:explore" />
+          </FabButton>
+          <FabButton
+            label="Insert Coordinates"
+            onClick={() => {
+              f7.popup.open("#coord-popup");
+            }}
+          >
+            <Icon ios="f7:globe" md="material:language" />
+          </FabButton>
+        </FabButtons>
+      </Fab>
     </Page>
   );
 };
