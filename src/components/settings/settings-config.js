@@ -24,6 +24,10 @@ export const SETTINGS_CONFIG = [
     id: "language",
     title: "Wikipedia Language",
     type: "dropdown",
+    icon: {
+      ios: "f7:globe",
+      md: "material:language",
+    },
     options: [
       { value: "en", display: "English" },
       { value: "de", display: "German" },
@@ -34,6 +38,10 @@ export const SETTINGS_CONFIG = [
   {
     id: "location",
     title: "Use User Location",
+    icon: {
+      ios: "f7:my_location",
+      md: "material:my_location",
+    },
     type: "checkbox",
     default: true,
   },
@@ -41,8 +49,11 @@ export const SETTINGS_CONFIG = [
     id: "default",
     title: "Fallback location",
     type: "group",
+    icon: {
+      ios: "f7:location_slash_fill",
+      md: "material:location_off",
+    },
     members: [
-      //!TODO Change default to fn!
       {
         id: "lat",
         title: "Latitude",
@@ -61,7 +72,6 @@ export const SETTINGS_CONFIG = [
   },
 ];
 
-/** PropType: SettingsConfigPropType */
 export const SettingsConfigPropType = PropTypes.arrayOf(
   PropTypes.shape({
     id: PropTypes.string.isRequired,
