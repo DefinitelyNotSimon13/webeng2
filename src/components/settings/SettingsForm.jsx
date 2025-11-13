@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { List, ListItem, ListInput, Toggle, Block } from "framework7-react";
+import {
+  List,
+  ListItem,
+  ListInput,
+  Toggle,
+  Block,
+  Icon,
+} from "framework7-react";
 import { SettingsHelper, useSettings } from "./settings-helper";
 import { SettingsConfigPropType } from "./settings-config";
 
@@ -24,7 +31,7 @@ function SettingsForm({ config }) {
 
   return (
     <>
-      <List dividers>
+      <List>
         {config.map((s) =>
           renderItem(s, settings, settings[s.id], updateSetting),
         )}
@@ -67,7 +74,7 @@ function renderDropdownOption(dropdown, currentValue, updateSetting) {
   return (
     <ListItem
       key={dropdown.id}
-      title={dropdown.title}
+      title={generateSettingsTitle(dropdown)}
       smartSelect
       smartSelectParams={{
         openIn: "popover",
@@ -104,7 +111,7 @@ function renderCheckboxOption(checkbox, currentValue, updateSetting) {
   };
   return (
     <ListItem key={checkbox.id}>
-      <span>{checkbox.title}</span>
+      <span>{generateSettingsTitle(checkbox)}</span>
       <Toggle
         value={value}
         defaultChecked={currentValue}
@@ -129,7 +136,7 @@ function renderTextOption(text, currentValue, updateSetting) {
       key={text.id}
       type="text"
       placeholder={text.placeholder}
-      label={text.title}
+      label={generateSettingsTitle(text)}
       value={value}
       onChange={onSettingsChange(text.id, setValue, updateSetting)}
     ></ListInput>
@@ -146,7 +153,7 @@ function renderGroup(group, currentSettings, updateSetting) {
   return (
     <ListItem key={group.id} className="settings-group-list-item">
       <div>
-        <p>{group.title}</p>
+        <p>{generateSettingsTitle(group)}</p>
         <Block strong className="settings-block">
           <List className="settings-group-list">
             {group.members.map((s) =>
@@ -177,6 +184,22 @@ function onSettingsChange(id, setState, updateSetting) {
     setState(val);
     updateSetting(id, val);
   };
+}
+
+function generateSettingsTitle(element) {
+  const icon = element.icon;
+  return (
+    <>
+      {icon ? (
+        <>
+          <Icon ios={icon.ios} md={icon.md} />
+          &nbsp;{element.title}
+        </>
+      ) : (
+        element.title
+      )}
+    </>
+  );
 }
 
 SettingsForm.propTypes = {
