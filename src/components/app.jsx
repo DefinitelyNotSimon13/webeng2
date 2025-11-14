@@ -5,8 +5,6 @@ import { f7ready, App, View } from "framework7-react";
 import routes from "../js/routes";
 import store from "../js/store";
 
-import { SETTINGS_CONFIG } from "./settings";
-
 import PoiList from "./poi-list";
 import DefaultPopUp from "./DefaultPopUp";
 
@@ -28,9 +26,7 @@ const MyApp = () => {
         : {},
   };
 
-  f7ready(() => {
-    store.dispatch("loadSettings", SETTINGS_CONFIG);
-  });
+  f7ready(() => {});
 
   return (
     <App {...f7params}>

@@ -1,60 +1,55 @@
 import { React, useState } from "react";
 import {
-  Block,
-  Button,
   Fab,
   FabButton,
-  ListInput,
   FabButtons,
   Icon,
   Link,
-  List,
   NavLeft,
   NavRight,
   NavTitle,
   Navbar,
   Page,
-  Segmented,
   f7,
 } from "framework7-react";
-import Map from "../../src/components/Map.jsx";
-import CoordPicker from "../components/coordPicker";
+import {
+  Map,
+  CurrentLocationMarker,
+  TargetLocationMarker,
+} from "../components/map";
+import CoordPicker from "../components/CoordPicker.jsx";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
-
-function parseCoord(valueStr, hemisphere, isLat) {
-  const v = Number(
-    String(valueStr ?? "")
-      .trim()
-      .replace(",", "."),
-  );
-  if (!Number.isFinite(v)) return null;
-  const abs = Math.abs(v);
-  const max = isLat ? 90 : 180;
-  if (abs > max) return null;
-  if (isLat) return hemisphere === "S" ? -abs : abs;
-  return hemisphere === "W" ? -abs : abs;
-}
+import LocationContext from "../js/context.js";
+import { DEFAULT_ZOOM, FRIEDRICHSHAFEN_COORDS } from "../consts.js";
+import { useSettings } from "../components/settings";
 
 const HomePage = () => {
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [latHem, setLatHem] = useState("N");
-  const [lngHem, setLngHem] = useState("O");
-  const [markerPos, setMarkerPos] = useState(null);
-  const [targetCenter, setTargetCenter] = useState(null);
-  const [targetZoom, setTargetZoom] = useState(13);
+  const settings = useSettings();
 
-  const handleSearch = (e) => {
-    e?.preventDefault?.();
-    const la = parseCoord(lat, latHem, true);
-    const lg = parseCoord(lng, lngHem, false);
-    if (la == null || lg == null) {
-      console.warn("Ungültige Koordinaten");
-      return;
-    }
-    setTargetCenter({ lat: la, lng: lg });
-    setTargetZoom((z) => Math.max(z, 14));
-    setMarkerPos({ lat: la, lng: lg });
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [targetLocation, setTargetLocation] = useState(null);
+  const [centerLocation, setCenterLocation] = useState(
+    settings.lat && settings.lng
+      ? {
+          lat: Number(settings.lat),
+          lng: Number(settings.lng),
+        }
+      : FRIEDRICHSHAFEN_COORDS,
+  );
+
+  const context = {
+    currentLocation,
+    setCurrentLocation,
+
+    targetLocation,
+    setTargetLocation,
+
+    centerLocation,
+    setCenterLocation,
+
+    zoom,
+    setZoom,
   };
 
   return (
@@ -80,98 +75,16 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <Map
-        initialCenter={{ lat: 47.651, lng: 9.479 }}
-        initialZoom={13}
-        autoLocate={true}
-        markerPosition={markerPos}
-      />
+      <LocationContext value={context}>
+        <SmallPopup id="coord-popup" title="Insert Coordinates">
+          <CoordPicker />
+        </SmallPopup>
 
-      <Block className="coord-box">
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lat"
-              type="text"
-              placeholder="Latitude"
-              value={lat}
-              onInput={(e) => setLat(e.target.value)}
-              clearButton
-            />
-          </List>
-
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={latHem === "N"}
-                onClick={() => setLatHem("N")}
-              >
-                N
-              </Button>
-              <Button
-                small
-                active={latHem === "S"}
-                onClick={() => setLatHem("S")}
-              >
-                S
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-pair">
-          <List className="coord-input-list" inset>
-            <ListInput
-              label="Lng"
-              type="text"
-              placeholder="Longitude"
-              value={lng}
-              onInput={(e) => setLng(e.target.value)}
-              clearButton
-            />
-          </List>
-
-          <div className="coord-seg">
-            <Segmented strong outlineIos>
-              <Button
-                small
-                active={lngHem === "O"}
-                onClick={() => setLngHem("O")}
-              >
-                O
-              </Button>
-              <Button
-                small
-                active={lngHem === "W"}
-                onClick={() => setLngHem("W")}
-              >
-                W
-              </Button>
-            </Segmented>
-          </div>
-        </div>
-
-        <div className="coord-actions">
-          <Button className="coord-search" fill onClick={handleSearch}>
-            Search
-          </Button>
-        </div>
-      </Block>
-
-      <SmallPopup id="coord-popup" title="Insert Coordinates">
-        <CoordPicker onSearch={handleSearch} />
-      </SmallPopup>
-
-      <Map
-        initialCenter={{ lat: 47.651, lng: 9.479 }}
-        initialZoom={13}
-        autoLocate={true}
-        centerOverride={targetCenter}
-        zoomOverride={targetZoom}
-        markerPosition={markerPos}
-      />
-
+        <Map enableGeolocation={settings.enableGeolocation ?? true}>
+          <CurrentLocationMarker />
+          <TargetLocationMarker />
+        </Map>
+      </LocationContext>
 
       <Fab position="right-bottom" slot="fixed">
         <Icon ios="f7:placemark_fill" md="material:location_pin" />
@@ -186,7 +99,7 @@ const HomePage = () => {
             <Icon ios="f7:compass_fill" md="material:explore" />
           </FabButton>
           <FabButton
-            label="Insert Coordinates"
+            label="Goto Coordinates"
             onClick={() => {
               f7.popup.open("#coord-popup");
             }}
