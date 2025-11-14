@@ -46,7 +46,7 @@ export const SETTINGS_CONFIG = [
     default: true,
   },
   {
-    id: "default",
+    id: "defaultLocation",
     title: "Fallback location",
     type: "group",
     icon: {
@@ -62,11 +62,11 @@ export const SETTINGS_CONFIG = [
         default: `${FRIEDRICHSHAFEN_COORDS.lat}`,
       },
       {
-        id: "long",
+        id: "lng",
         title: "Longitude",
         type: "text",
         placeholder: "e.g. 11.575",
-        default: `${FRIEDRICHSHAFEN_COORDS.long}`,
+        default: `${FRIEDRICHSHAFEN_COORDS.lng}`,
       },
     ],
   },

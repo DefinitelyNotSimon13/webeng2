@@ -1,26 +1,55 @@
-import React from "react";
+import { React, useState } from "react";
 import {
-  Page,
-  Navbar,
-  NavRight,
-  NavLeft,
-  NavTitle,
-  Link,
-  Block,
-  Icon,
   Fab,
   FabButton,
   FabButtons,
+  Icon,
+  Link,
+  NavLeft,
+  NavRight,
+  NavTitle,
+  Navbar,
+  Page,
   f7,
 } from "framework7-react";
-import ExampleSettingsUsage from "../components/settings/ExampleSettingsUsage";
-import Map from "../../src/components/Map.jsx";
-import CoordPicker from "../components/coordPicker";
+import {
+  Map,
+  CurrentLocationMarker,
+  TargetLocationMarker,
+} from "../components/map";
+import CoordPicker from "../components/CoordPicker.jsx";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
+import LocationContext from "../js/context.js";
+import { DEFAULT_ZOOM, FRIEDRICHSHAFEN_COORDS } from "../consts.js";
+import { useSettings } from "../components/settings";
 
 const HomePage = () => {
-  const handleSearch = (coords) => {
-    console.log("Search coords:", coords);
+  const settings = useSettings();
+
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [targetLocation, setTargetLocation] = useState(null);
+  const [centerLocation, setCenterLocation] = useState(
+    settings.lat && settings.lng
+      ? {
+          lat: Number(settings.lat),
+          lng: Number(settings.lng),
+        }
+      : FRIEDRICHSHAFEN_COORDS,
+  );
+
+  const context = {
+    currentLocation,
+    setCurrentLocation,
+
+    targetLocation,
+    setTargetLocation,
+
+    centerLocation,
+    setCenterLocation,
+
+    zoom,
+    setZoom,
   };
 
   return (
@@ -46,19 +75,16 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <SmallPopup id="coord-popup" title="Insert Coordinates">
-        <CoordPicker onSearch={handleSearch} />
-      </SmallPopup>
+      <LocationContext value={context}>
+        <SmallPopup id="coord-popup" title="Insert Coordinates">
+          <CoordPicker />
+        </SmallPopup>
 
-      <Block strong inset>
-        <Map
-          initialCenter={{ lat: 47.651, lng: 9.479 }}
-          initialZoom={13}
-          autoLocate={true}
-        />
-      </Block>
-
-      <ExampleSettingsUsage />
+        <Map enableGeolocation={settings.enableGeolocation ?? true}>
+          <CurrentLocationMarker />
+          <TargetLocationMarker />
+        </Map>
+      </LocationContext>
 
       <Fab position="right-bottom" slot="fixed">
         <Icon ios="f7:placemark_fill" md="material:location_pin" />
@@ -73,7 +99,7 @@ const HomePage = () => {
             <Icon ios="f7:compass_fill" md="material:explore" />
           </FabButton>
           <FabButton
-            label="Insert Coordinates"
+            label="Goto Coordinates"
             onClick={() => {
               f7.popup.open("#coord-popup");
             }}

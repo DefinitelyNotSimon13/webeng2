@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../css/coordPicker.css";
 import { Block, List, ListInput, Segmented, Button } from "framework7-react";
-import PropTypes from "prop-types";
+import LocationContext from "../js/context";
 
-const CoordPicker = ({ onSearch }) => {
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [latHem, setLatHem] = useState("N");
-  const [lngHem, setLngHem] = useState("O");
+function parseCoord(valueStr, hemisphere, isLat) {
+  const v = Number(
+    String(valueStr ?? "")
+      .trim()
+      .replace(",", "."),
+  );
+  if (!Number.isFinite(v)) return null;
+  const abs = Math.abs(v);
+  const max = isLat ? 90 : 180;
+  if (abs > max) return null;
+  if (isLat) return hemisphere === "S" ? -abs : abs;
+  return hemisphere === "W" ? -abs : abs;
+}
+
+const CoordPicker = () => {
+  const { centerLocation, setCenterLocation } = useContext(LocationContext);
+
+  const [lat, setLat] = useState(Math.abs(centerLocation.lat).toString() ?? "");
+  const [lng, setLng] = useState(Math.abs(centerLocation.lng).toString() ?? "");
+  const [latHem, setLatHem] = useState(centerLocation.lat < 0 ? "S" : "N");
+  const [lngHem, setLngHem] = useState(centerLocation.lng < 0 ? "W" : "O");
 
   const handleSearch = () => {
-    if (onSearch) onSearch({ lat, latHem, lng, lngHem });
+    const newLat = parseCoord(lat, latHem, true);
+    const newLng = parseCoord(lng, lngHem, false);
+    if (!newLat || !newLng) {
+      console.warn("Invalid coordinates provided");
+      return;
+    }
+    setCenterLocation({ lat: newLat, lng: newLng });
   };
+
   return (
     <Block className="coord-box">
       <div className="coord-pair">
@@ -85,10 +108,6 @@ const CoordPicker = ({ onSearch }) => {
       </div>
     </Block>
   );
-};
-
-CoordPicker.propTypes = {
-  onSearch: PropTypes.func.isRequired,
 };
 
 export default CoordPicker;

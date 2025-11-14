@@ -1,5 +1,5 @@
 import { createStore } from "framework7/lite";
-import { SettingsHelper } from "../components/settings";
+import { SettingsHelper, SETTINGS_CONFIG } from "../components/settings";
 
 const store = createStore({
   state: {
@@ -33,5 +33,7 @@ const store = createStore({
     },
   },
 });
+
+store.dispatch("loadSettings", SETTINGS_CONFIG);
 
 export default store;
