@@ -19,6 +19,8 @@ import {
 } from "../components/map";
 import CoordPicker from "../components/CoordPicker.jsx";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
+import DefaultPopUp from "../components/DefaultPopUp.jsx";
+import PoiList from "../components/poi-list.jsx";
 import LocationContext from "../js/context.js";
 import { DEFAULT_ZOOM, FRIEDRICHSHAFEN_COORDS } from "../consts.js";
 import { useSettings } from "../components/settings";
@@ -75,16 +77,20 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <LocationContext value={context}>
+      <LocationContext.Provider value={context}>
         <SmallPopup id="coord-popup" title="Insert Coordinates">
           <CoordPicker />
         </SmallPopup>
+
+        <DefaultPopUp id="POI-list" title="Nearby Points of Interest">
+          <PoiList />
+        </DefaultPopUp>
 
         <Map enableGeolocation={settings.enableGeolocation ?? true}>
           <CurrentLocationMarker />
           <TargetLocationMarker />
         </Map>
-      </LocationContext>
+      </LocationContext.Provider>
 
       <Fab position="right-bottom" slot="fixed">
         <Icon ios="f7:placemark_fill" md="material:location_pin" />

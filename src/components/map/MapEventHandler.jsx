@@ -3,8 +3,13 @@ import { useMapEvents } from "react-leaflet";
 import LocationContext from "../../js/context";
 
 export default function MapEventHandler() {
-  const { currentLocation, setCurrentLocation, setTargetLocation } =
-    useContext(LocationContext);
+  const {
+    currentLocation,
+    setCurrentLocation,
+    setTargetLocation,
+    setCenterLocation,
+    setZoom,
+  } = useContext(LocationContext);
 
   const map = useMapEvents({
     click(e) {
@@ -23,6 +28,11 @@ export default function MapEventHandler() {
     locationfound(e) {
       setCurrentLocation({ lat: e.latlng.lat, lng: e.latlng.lng });
       map.setView(e.latlng, map.getZoom(), { animate: true });
+    },
+    moveend() {
+      const center = map.getCenter();
+      setCenterLocation({ lat: center.lat, lng: center.lng });
+      setZoom(map.getZoom());
     },
   });
 
