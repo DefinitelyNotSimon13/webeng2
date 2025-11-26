@@ -7,6 +7,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import LocationContext from "../../js/context.js";
+import NearbyPoiMarkers from "./NearbyPoiMarkers.jsx";
 
 import "../../css/Map.css";
 import MapEventHandler from "./MapEventHandler.jsx";
@@ -80,6 +81,7 @@ export default function Map({ enableGeolocation, children }) {
 
         <MapViewUpdater />
         <MapEventHandler />
+        <NearbyPoiMarkers />
 
         {enableGeolocation && <Locator />}
 
