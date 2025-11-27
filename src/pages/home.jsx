@@ -24,6 +24,8 @@ import PoiList from "../components/poi-list.jsx";
 import LocationContext from "../js/context.js";
 import { DEFAULT_ZOOM, FRIEDRICHSHAFEN_COORDS } from "../consts.js";
 import { useSettings } from "../components/settings";
+import RoutingMachine from "../components/map/RoutingMachine.jsx";
+import CalculateRouteButton from "../components/map/CalculateRouteButton.jsx";
 
 const HomePage = () => {
   const settings = useSettings();
@@ -34,9 +36,9 @@ const HomePage = () => {
   const [centerLocation, setCenterLocation] = useState(
     settings.lat && settings.lng
       ? {
-          lat: Number(settings.lat),
-          lng: Number(settings.lng),
-        }
+        lat: Number(settings.lat),
+        lng: Number(settings.lng),
+      }
       : FRIEDRICHSHAFEN_COORDS,
   );
 
@@ -53,6 +55,13 @@ const HomePage = () => {
     zoom,
     setZoom,
   };
+
+
+  const [routeWaypoints, setRouteWaypoints] = useState([]);
+  const onCalculateRoute = () => {
+    setRouteWaypoints([currentLocation, targetLocation]);
+    setTargetLocation(null);
+  }
 
   return (
     <Page name="home">
@@ -89,7 +98,12 @@ const HomePage = () => {
         <Map enableGeolocation={settings.enableGeolocation ?? true}>
           <CurrentLocationMarker />
           <TargetLocationMarker />
+          {routeWaypoints.length >= 2 ?
+            <RoutingMachine waypoints={routeWaypoints} />
+            : null
+          }
         </Map>
+        <CalculateRouteButton onCalculateRoute={onCalculateRoute} />
       </LocationContext.Provider>
 
       <Fab position="right-bottom" slot="fixed">

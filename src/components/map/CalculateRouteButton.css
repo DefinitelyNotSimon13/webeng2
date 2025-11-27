@@ -1,0 +1,33 @@
+.bottom-button-container {
+    position: fixed;
+    max-width: 10rem;
+    z-index: 9999;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 16px;
+
+
+    animation: jumpIn 0.6s ease-out forwards;
+
+}  
+
+.bottom-button-container.hidden {
+    animation: jumpOut 0.4s ease-in forwards;
+    pointer-events: none;
+}
+
+/* .bottom-button-container { */
+/*     animation: jumpOut 0.4s ease-in forwards; */
+/*     pointer-events: none; */
+/* } */
+
+@keyframes jumpIn {
+    0%   { opacity: 0; transform: translate(-50%, 30px); }
+    60%  { opacity: 1; transform: translate(-50%, -8px); }
+    100% { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes jumpOut {
+    0%   { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, 25px); }
+}
