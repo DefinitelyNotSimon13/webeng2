@@ -10,7 +10,7 @@ export function useNearbyWikipedia({ center, radius, lang }) {
     if (
       center === undefined ||
       !Number.isFinite(center.lat) ||
-      !Number.isFinite(center.lon)
+      !Number.isFinite(center.lng)
     ) {
       console.error("Invalid center coordinates:", center);
       return;
@@ -31,7 +31,7 @@ export function useNearbyWikipedia({ center, radius, lang }) {
       try {
         const pois = await fetchNearby({
           lat: center.lat,
-          lon: center.lon,
+          lng: center.lng,
           radius,
           lang,
           signal: abortController.signal,
@@ -60,7 +60,7 @@ export function useNearbyWikipedia({ center, radius, lang }) {
     return () => {
       abortController.abort();
     };
-  }, [center?.lat, center?.lon, radius, lang]);
+  }, [center?.lat, center?.lng, radius, lang]);
 
   return [loading, error, data];
 }

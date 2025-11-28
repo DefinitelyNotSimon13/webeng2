@@ -5,7 +5,6 @@ import { f7ready, App, View } from "framework7-react";
 import routes from "../js/routes";
 import store from "../js/store";
 
-
 const MyApp = () => {
   const f7params = {
     name: "Map App", // App name
@@ -19,12 +18,12 @@ const MyApp = () => {
     serviceWorker:
       import.meta.env.MODE === "production"
         ? {
-          path: "/service-worker.js",
-        }
+            path: "/service-worker.js",
+          }
         : {},
   };
 
-  f7ready(() => { });
+  f7ready(() => {});
 
   return (
     <App {...f7params}>

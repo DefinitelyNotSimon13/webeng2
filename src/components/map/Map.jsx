@@ -10,7 +10,6 @@ import MapEventHandler from "./MapEventHandler.jsx";
 
 import "../../css/Map.css";
 
-
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,

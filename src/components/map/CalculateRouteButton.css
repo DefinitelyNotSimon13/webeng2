@@ -1,33 +1,87 @@
 .bottom-button-container {
-    position: fixed;
-    max-width: 10rem;
-    z-index: 9999;
-    transform: translateX(-50%);
-    left: 50%;
-    bottom: 16px;
+  position: fixed;
+  width: 11rem;
+  max-width: 11rem;
+  z-index: 9999;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 18px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    animation: jumpIn 0.6s ease-out forwards;
+  animation: jumpIn 0.6s ease-out forwards;
 
-}  
-
-.bottom-button-container.hidden {
-    animation: jumpOut 0.4s ease-in forwards;
-    pointer-events: none;
+  gap: 5px;
 }
 
-/* .bottom-button-container { */
-/*     animation: jumpOut 0.4s ease-in forwards; */
-/*     pointer-events: none; */
-/* } */
+.bottom-button-container.hidden {
+  animation: jumpOut 0.4s ease-in forwards;
+  pointer-events: none;
+}
+
+.bottom-center-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  transition:
+    width 0.25s ease,
+    border-radius 0.25s ease;
+}
+
+.bottom-center-button.bottom-center-button--loading {
+  opacity: 1 !important;
+  width: 4rem;
+  border-radius: 999px;
+}
+
+.bottom-center-button.bottom-center-button--loading .preloader {
+  color: #000000;
+  width: 2rem;
+}
+
+.bottom-center-button.bottom-center-button--failed {
+  background: #d9534f !important;
+  color: white !important;
+  border-radius: 999px;
+  width: 100%;
+}
+
+.bottom-center-button.bottom-center-button--failed .icon {
+  margin-right: 0.4rem;
+}
+
+.add-waypoint-button {
+  width: 5px !important;
+  border-radius: 0px 10px 10px 0px !important;
+}
 
 @keyframes jumpIn {
-    0%   { opacity: 0; transform: translate(-50%, 30px); }
-    60%  { opacity: 1; transform: translate(-50%, -8px); }
-    100% { opacity: 1; transform: translate(-50%, 0); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 30px);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 @keyframes jumpOut {
-    0%   { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, 25px); }
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 25px);
+  }
 }

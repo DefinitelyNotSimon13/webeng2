@@ -1,21 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useMap } from "react-leaflet";
 import L from "leaflet";
 import PropTypes from "prop-types";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css"; // important!
 import "leaflet-routing-machine";
+import LocationContext, { RoutingStatus } from "../../js/context";
 
 function RoutingMachine({
   waypoints,
   draggable = false,
-  showAlternatives = false,
+  showAlternatives = true,
   serviceUrl = "https://router.project-osrm.org/route/v1",
 }) {
   const map = useMap();
   const controlRef = useRef(null);
 
+  const { routingStatus, setRoutingStatus } = useContext(LocationContext);
+
+  if (routingStatus === RoutingStatus.PLANNING) {
+    waypoints = [];
+  }
+
   useEffect(() => {
-    if (!map || !waypoints || waypoints.length < 2) return;
+    if (!map || !waypoints || waypoints.length < 2) {
+      if (controlRef.current) {
+        map.removeControl(controlRef.current);
+        controlRef.current = null;
+      }
+      return;
+    }
 
     if (!controlRef.current) {
       controlRef.current = L.Routing.control({
@@ -25,7 +38,7 @@ function RoutingMachine({
         addWaypoints: draggable,
         showAlternatives,
         collapsible: true,
-        show: true,
+        show: false,
         fitSelectedRoutes: "smart",
         lineOptions: {
           // styles: [
@@ -39,18 +52,15 @@ function RoutingMachine({
           //   { color: "#64748b", opacity: 0.7, weight: 4, dashArray: "4,8" },
           // ],
         },
-
       }).addTo(map);
-      controlRef.current.on("routingstart", () => {
-        console.log("Routing started…");
-      });
 
-      controlRef.current.on("routesfound", (e) => {
-        console.log("Routes found:", e.routes);
+      controlRef.current.on("routesfound", () => {
+        setRoutingStatus(RoutingStatus.ROUTE_FOUND);
       });
 
       controlRef.current.on("routingerror", (e) => {
-        console.error("Routing error:", e.error);
+        console.error("[RoutingMachine] Failed to find route", e);
+        setRoutingStatus(RoutingStatus.ROUTING_FAILED);
       });
     } else {
       controlRef.current.setWaypoints(waypoints.map((w) => L.latLng(w)));
@@ -72,7 +82,7 @@ RoutingMachine.propTypes = {
     PropTypes.shape({
       lat: PropTypes.number.isRequired,
       lng: PropTypes.number.isRequired,
-    })
+    }),
   ).isRequired,
   draggable: PropTypes.bool,
   showAlternatives: PropTypes.bool,
