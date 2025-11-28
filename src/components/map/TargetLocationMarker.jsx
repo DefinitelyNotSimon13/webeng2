@@ -5,6 +5,7 @@ import { Marker, Popup } from "react-leaflet";
 
 export default function TargetLocationMarker() {
   const { targetLocation } = useContext(LocationContext);
+
   return (
     <>
       {targetLocation && (

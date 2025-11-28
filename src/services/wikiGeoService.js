@@ -15,15 +15,15 @@ export class ApiError extends Error {
   }
 }
 
-function validateParams({ lat, lon, radius, lang }) {
+function validateParams({ lat, lng, radius, lang }) {
   const errors = [];
 
   if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
     errors.push("lat must be in range [-90, 90]");
   }
 
-  if (!Number.isFinite(lon) || lon < -180 || lon > 180) {
-    errors.push("lon must be in range [-180, 180]");
+  if (!Number.isFinite(lng) || lng < -180 || lng > 180) {
+    errors.push("lng must be in range [-180, 180]");
   }
 
   const r = radius ?? WIKI_DEFAULT_RADIUS;
@@ -41,21 +41,21 @@ function validateParams({ lat, lon, radius, lang }) {
     throw new ValidationError(`Invalid parameters: ${errors.join("; ")}`);
   }
 
-  return { lat, lon, radius: Math.floor(r), lang: l };
+  return { lat, lng, radius: Math.floor(r), lang: l };
 }
 
 function buildQueryString(params) {
   return new URLSearchParams(params).toString();
 }
 
-export async function fetchNearby({ lat, lon, radius, lang, signal } = {}) {
-  const validated = validateParams({ lat, lon, radius, lang });
+export async function fetchNearby({ lat, lng, radius, lang, signal } = {}) {
+  const validated = validateParams({ lat, lng, radius, lang });
   const endpoint = `https://${validated.lang}.wikipedia.org/w/api.php`;
 
   const geoUrl = `${endpoint}?${buildQueryString({
     action: "query",
     list: "geosearch",
-    gscoord: `${validated.lat}|${validated.lon}`,
+    gscoord: `${validated.lat}|${validated.lng}`,
     gsradius: String(validated.radius),
     gslimit: "50",
     format: "json",
@@ -122,7 +122,7 @@ export async function fetchNearby({ lat, lon, radius, lang, signal } = {}) {
       image: details.image ?? null,
       link: details.link,
       distance: geoItem.dist ?? null,
-      coord: { lat: geoItem.lat, lon: geoItem.lon },
+      coord: { lat: geoItem.lat, lng: geoItem.lng },
     };
   });
 
