@@ -53,7 +53,7 @@ const HomePage = () => {
           />
         </NavRight>
         <NavLeft>
-          <img className="nav-icon" src="/icons/favicon.png" />
+          <img className="nav-icon" src="icon.webp" />
         </NavLeft>
         <NavTitle>Map</NavTitle>
       </Navbar>
