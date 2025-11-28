@@ -8,7 +8,7 @@
   "bundler": "vite",
   "theming": {
     "customColor": false,
-    "color": "#007aff",
+    "color": "#3aacaa",
     "darkMode": false,
     "iconFonts": true
   },

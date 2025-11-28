@@ -1,12 +1,13 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App",
+  "name": "Map App",
+  "short_name": "Map App",
+  "description": "Web application with routing capabilities and location-based wikipedia integration.",
   "lang": "en-US",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
-  "background_color": "#EE350F",
-  "theme_color": "#EE350F",
+  "background_color": "#3aacaa",
+  "theme_color": "#3aacaa",
   "icons": [
     {
       "src": "/icons/128x128.png",
@@ -36,6 +37,19 @@
     {
       "src": "/icons/512x512.png",
       "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "720x1280",
       "type": "image/png"
     }
   ]
