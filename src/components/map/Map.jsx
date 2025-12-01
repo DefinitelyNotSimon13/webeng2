@@ -70,6 +70,9 @@ export default function Map({ enableGeolocation, children }) {
         zoom={zoom}
         scrollWheelZoom
         className="map-container"
+        whenReady={(mapInstance) => {
+          setTimeout(() => mapInstance.target.invalidateSize(), 100);
+        }}
       >
         <TileLayer
           attribution="© OpenStreetMap contributors"

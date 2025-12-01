@@ -1,5 +1,6 @@
 import { f7, useStore } from "framework7-react";
 import { SETTINGS_CONFIG } from "./settings-config";
+import store from "../../js/store";
 
 /** Storage key for settings */
 const STORAGE_KEY = "app:settings";
@@ -48,7 +49,9 @@ export class SettingsHelper {
    * @param {*} value
    */
   static updateSetting(id, value) {
-    f7.store.dispatch("setSetting", { id, value });
+    store
+      .dispatch("setSetting", { id, value })
+      .then(() => console.log("[SettingsHelper] Setting updated:", id, value));
   }
 
   /**
