@@ -40,6 +40,9 @@ function RoutingMachine({
         collapsible: true,
         show: false,
         fitSelectedRoutes: "smart",
+        createMarker: () => {
+          return null;
+        },
         lineOptions: {
           // styles: [
           //   { color: "#0f172a", opacity: 0.25, weight: 8 },
