@@ -5,7 +5,7 @@ import LocationContext from "../../js/context";
 import { useNearbyWikipedia } from "../../hooks/useNearbyWikipedia";
 import { Link } from "framework7-react";
 
-export default function NearbyPoiMarkers({ lang = "en" }) {
+export default function NearbyPoiMarkers({ lang = "en", radius = 2000 }) {
   const map = useMap();
   const { targetLocation, centerLocation } = useContext(LocationContext);
 
@@ -23,13 +23,6 @@ export default function NearbyPoiMarkers({ lang = "en" }) {
   };
 
   const bounds = map.getBounds();
-  const northWest = bounds.getNorthWest();
-  const southWest = bounds.getSouthWest();
-
-  const radius = map.distance(
-    [northWest.lat, northWest.lng],
-    [southWest.lat, southWest.lng],
-  );
 
   const [loading, error, items] = useNearbyWikipedia({
     center,
@@ -57,11 +50,11 @@ export default function NearbyPoiMarkers({ lang = "en" }) {
             <CircleMarker
               key={id}
               center={[item.coord.lat, item.coord.lon]}
-              radius={10}
+              radius={8}
               pathOptions={{
-                color: "blue",
-                fillColor: "blue",
-                fillOpacity: 0.4,
+                color: "#02c2c2ff",
+                fillColor: "#00ffff",
+                fillOpacity: 0.7,
                 weight: 2,
               }}
               eventHandlers={{
@@ -73,7 +66,6 @@ export default function NearbyPoiMarkers({ lang = "en" }) {
                 },
               }}
             >
-              {/* Hover Tooltip nur wenn kein Popup offen ist */}
               {!hasAnyPopupOpen && (
                 <Tooltip direction="top" offset={[0, -4]} sticky>
                   <div>
@@ -87,7 +79,6 @@ export default function NearbyPoiMarkers({ lang = "en" }) {
                 </Tooltip>
               )}
 
-              {/* Klick Popup bleibt stehen bis woanders geklickt wird */}
               <Popup>
                 <div className="poi-popup">
                   <h3>{item.title}</h3>
@@ -114,4 +105,5 @@ export default function NearbyPoiMarkers({ lang = "en" }) {
 
 NearbyPoiMarkers.propTypes = {
   lang: PropTypes.string,
+  radius: PropTypes.number,
 };
