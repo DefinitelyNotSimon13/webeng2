@@ -4,10 +4,11 @@ import LocationContext from "../../js/context";
 import { Marker, Popup } from "react-leaflet";
 import { createMarkerIcon } from "./customMarkerIcon";
 
-const targetLocationIcon = createMarkerIcon("#e53e3e");
+const targetLocationIcon = createMarkerIcon("#e53e3e", 16);
 
 export default function TargetLocationMarker() {
   const { targetLocation } = useContext(LocationContext);
+
   return (
     <>
       {targetLocation && (

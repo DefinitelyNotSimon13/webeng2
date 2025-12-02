@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React from "react";
 import {
   Fab,
   FabButton,
@@ -22,37 +22,18 @@ import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 import DefaultPopUp from "../components/DefaultPopUp.jsx";
 import PoiList from "../components/poi-list.jsx";
 import LocationContext from "../js/context.js";
-import { DEFAULT_ZOOM, FRIEDRICHSHAFEN_COORDS } from "../consts.js";
 import { useSettings } from "../components/settings";
+import RoutingMachine from "../components/map/RoutingMachine.jsx";
+import CalculateRouteButton from "../components/map/CalculateRouteButton.jsx";
+import WaypointMarker from "../components/map/WaypointMarker.jsx";
+import useLocationState from "../hooks/useLocationState.js";
+import RoutePlaceholder from "../components/map/RoutePlaceholder.jsx";
 
 const HomePage = () => {
   const settings = useSettings();
 
-  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const [targetLocation, setTargetLocation] = useState(null);
-  const [centerLocation, setCenterLocation] = useState(
-    settings.lat && settings.lng
-      ? {
-          lat: Number(settings.lat),
-          lng: Number(settings.lng),
-        }
-      : FRIEDRICHSHAFEN_COORDS,
-  );
-
-  const context = {
-    currentLocation,
-    setCurrentLocation,
-
-    targetLocation,
-    setTargetLocation,
-
-    centerLocation,
-    setCenterLocation,
-
-    zoom,
-    setZoom,
-  };
+  const { contextValue, fullRoute, calculateRoute, clearRoute } =
+    useLocationState(settings);
 
   return (
     <Page name="home">
@@ -77,7 +58,7 @@ const HomePage = () => {
         <NavTitle>Map</NavTitle>
       </Navbar>
 
-      <LocationContext.Provider value={context}>
+      <LocationContext.Provider value={contextValue}>
         <SmallPopup id="coord-popup" title="Insert Coordinates">
           <CoordPicker />
         </SmallPopup>
@@ -89,7 +70,14 @@ const HomePage = () => {
         <Map enableGeolocation={settings.enableGeolocation ?? true}>
           <CurrentLocationMarker />
           <TargetLocationMarker />
+          <RoutePlaceholder />
+          <WaypointMarker />
+          <RoutingMachine waypoints={fullRoute} />
         </Map>
+        <CalculateRouteButton
+          onCalculateRoute={calculateRoute}
+          onClearRoute={clearRoute}
+        />
       </LocationContext.Provider>
 
       <Fab position="right-bottom" slot="fixed">

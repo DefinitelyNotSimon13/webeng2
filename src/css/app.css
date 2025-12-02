@@ -73,3 +73,19 @@
   height: 30px;
   padding: 10px;
 }
+
+/* Make the routing container look like a card (optional) */
+.leaflet-routing-container.leaflet-bar {
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* style the collapse button itself */
+.leaflet-routing-collapse-btn {
+}
+
+/* kill the weird original glyph and inject our own */
+.leaflet-routing-collapse-btn::before {
+}

@@ -15,7 +15,7 @@ const PoiList = () => {
 
   const activeLocation = targetLocation || centerLocation;
   const center = activeLocation
-    ? { lat: activeLocation.lat, lon: activeLocation.lng }
+    ? { lat: activeLocation.lat, lng: activeLocation.lng }
     : null;
 
   const [loading, error, items] = useNearbyWikipedia({
