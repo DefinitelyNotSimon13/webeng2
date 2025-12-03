@@ -100,6 +100,16 @@ const HomePage = () => {
           >
             <Icon ios="f7:globe" md="material:language" />
           </FabButton>
+          <FabButton
+            label="Center"
+            onClick={() => {
+              const loc = contextValue?.currentLocation;
+              if (!loc) return;
+              contextValue?.setCenterLocation?.({ ...loc });
+            }}
+          >
+            <Icon ios="f7:locate" md="material:my_location" />
+          </FabButton>
         </FabButtons>
       </Fab>
     </Page>
