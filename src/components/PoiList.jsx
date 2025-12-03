@@ -1,28 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import "../css/poi-list.css";
 import { Block, Card, CardContent, CardHeader, Link } from "framework7-react";
-import { useNearbyWikipedia } from "../hooks/useNearbyWikipedia";
-import LocationContext from "../js/context";
-import { useSettings } from "./settings";
+import useNearbyPois from "../hooks/useNearbyPois";
 
-/* Component for listing
- * Point of Interests
- */
 const PoiList = () => {
-  const settings = useSettings();
-  const radius = 2000;
-  const { targetLocation, centerLocation } = useContext(LocationContext);
+  const [loading, error, items] = useNearbyPois();
 
-  const activeLocation = targetLocation || centerLocation;
-  const center = activeLocation
-    ? { lat: activeLocation.lat, lng: activeLocation.lng }
-    : null;
-
-  const [loading, error, items] = useNearbyWikipedia({
-    center,
-    radius,
-    lang: settings.language,
-  });
   if (loading) {
     return (
       <Block>

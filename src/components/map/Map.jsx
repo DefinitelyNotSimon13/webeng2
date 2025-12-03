@@ -6,9 +6,11 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import LocationContext from "../../js/context.js";
+import NearbyPoiMarkers from "./NearbyPoiMarkers.jsx";
 import MapEventHandler from "./MapEventHandler.jsx";
 
 import "../../css/Map.css";
+import { useSettings } from "../settings/settings-helper.js";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -53,9 +55,19 @@ function MapViewUpdater() {
 
 function Locator() {
   const map = useMap();
+  const { setCurrentLocation } = useContext(LocationContext);
+  const settings = useSettings();
   useEffect(() => {
-    map.locate();
-  }, [map]);
+    if (settings.location) {
+      map.locate({
+        watch: true,
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+      });
+    } else {
+      setCurrentLocation(null);
+    }
+  }, [map, settings.location]);
 }
 
 export default function Map({ enableGeolocation, children }) {
@@ -82,6 +94,7 @@ export default function Map({ enableGeolocation, children }) {
 
         <MapViewUpdater />
         <MapEventHandler />
+        <NearbyPoiMarkers />
 
         {enableGeolocation && <Locator />}
 

@@ -20,7 +20,7 @@ import "../css/icons.css";
 import "../css/app.css";
 
 // Import App Component
-import App from "../components/app.jsx";
+import App from "../components/App.jsx";
 
 // Init F7 React Plugin
 Framework7.use(Framework7React);

@@ -1,16 +1,23 @@
 import { createStore } from "framework7/lite";
-import { SettingsHelper, SETTINGS_CONFIG } from "../components/settings";
+import { SettingsHelper } from "../components/settings";
 
 const store = createStore({
   state: {
     settings: [],
+    pois: [],
   },
   getters: {
     settings({ state }) {
       return state.settings;
     },
+    pois({ state }) {
+      return state.pois;
+    },
   },
   actions: {
+    setPois({ state }, pois) {
+      state.pois = pois;
+    },
     loadSettings({ state }, config) {
       console.debug("[store] loadSettings action called");
       state.settings = SettingsHelper.fromLocalStorage();
@@ -33,7 +40,5 @@ const store = createStore({
     },
   },
 });
-
-store.dispatch("loadSettings", SETTINGS_CONFIG);
 
 export default store;
