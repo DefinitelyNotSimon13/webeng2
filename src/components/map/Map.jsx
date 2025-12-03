@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -8,9 +7,9 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import LocationContext from "../../js/context.js";
 import NearbyPoiMarkers from "./NearbyPoiMarkers.jsx";
+import MapEventHandler from "./MapEventHandler.jsx";
 
 import "../../css/Map.css";
-import MapEventHandler from "./MapEventHandler.jsx";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -72,6 +71,9 @@ export default function Map({ enableGeolocation, children }) {
         zoom={zoom}
         scrollWheelZoom
         className="map-container"
+        whenReady={(mapInstance) => {
+          setTimeout(() => mapInstance.target.invalidateSize(), 100);
+        }}
       >
         <TileLayer
           attribution="© OpenStreetMap contributors"

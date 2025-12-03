@@ -1,23 +1,28 @@
 import React, { useContext } from "react";
 import "../css/poi-list.css";
 import { Block, Card, CardContent, CardHeader, Link } from "framework7-react";
-import PropTypes from "prop-types";
 import { useNearbyWikipedia } from "../hooks/useNearbyWikipedia";
 import LocationContext from "../js/context";
+import { useSettings } from "./settings";
 
 /* Component for listing
  * Point of Interests
  */
-const PoiList = (props) => {
-  const { radius = 2000, lang = "en" } = props;
+const PoiList = () => {
+  const settings = useSettings();
+  const radius = 2000;
   const { targetLocation, centerLocation } = useContext(LocationContext);
 
   const activeLocation = targetLocation || centerLocation;
   const center = activeLocation
-    ? { lat: activeLocation.lat, lon: activeLocation.lng }
+    ? { lat: activeLocation.lat, lng: activeLocation.lng }
     : null;
-  const [loading, error, items] = useNearbyWikipedia({ center, radius, lang });
 
+  const [loading, error, items] = useNearbyWikipedia({
+    center,
+    radius,
+    lang: settings.language,
+  });
   if (loading) {
     return (
       <Block>
@@ -64,11 +69,6 @@ const PoiList = (props) => {
       ))}
     </Block>
   );
-};
-
-PoiList.propTypes = {
-  radius: PropTypes.number,
-  lang: PropTypes.string,
 };
 
 export default PoiList;
