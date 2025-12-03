@@ -122,7 +122,7 @@ export async function fetchNearby({ lat, lng, radius, lang, signal } = {}) {
       image: details.image ?? null,
       link: details.link,
       distance: geoItem.dist ?? null,
-      coord: { lat: geoItem.lat, lng: geoItem.lng },
+      coord: { lat: geoItem.lat, lng: geoItem.lon },
     };
   });
 

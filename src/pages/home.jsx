@@ -20,7 +20,7 @@ import {
 import CoordPicker from "../components/CoordPicker.jsx";
 import SmallPopup from "../components/small-popup/SmallPopup.jsx";
 import DefaultPopUp from "../components/DefaultPopUp.jsx";
-import PoiList from "../components/poi-list.jsx";
+import PoiList from "../components/PoiList.jsx";
 import LocationContext from "../js/context.js";
 import { useSettings } from "../components/settings";
 import RoutingMachine from "../components/map/RoutingMachine.jsx";

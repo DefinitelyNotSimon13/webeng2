@@ -1,34 +1,11 @@
-import React, { useContext, useState } from "react";
-import { CircleMarker, Tooltip, Popup, useMap } from "react-leaflet";
+import React from "react";
+import { CircleMarker, Popup } from "react-leaflet";
 import PropTypes from "prop-types";
-import LocationContext from "../../js/context";
-import { useNearbyWikipedia } from "../../hooks/useNearbyWikipedia";
 import { Link } from "framework7-react";
+import useNearbyPois from "../../hooks/useNearbyPois";
 
-export default function NearbyPoiMarkers({ lang = "en", radius = 2000 }) {
-  const map = useMap();
-  const { targetLocation, centerLocation } = useContext(LocationContext);
-
-  const activeLocation = targetLocation || centerLocation;
-
-  const [activePoiId, setActivePoiId] = useState(null);
-
-  if (!activeLocation) {
-    return null;
-  }
-
-  const center = {
-    lat: activeLocation.lat,
-    lon: activeLocation.lng,
-  };
-
-  const bounds = map.getBounds();
-
-  const [loading, error, items] = useNearbyWikipedia({
-    center,
-    radius,
-    lang,
-  });
+export default function NearbyPoiMarkers() {
+  const [loading, error, items] = useNearbyPois();
 
   if (loading || error || !items || items.length === 0) {
     return null;
@@ -36,69 +13,39 @@ export default function NearbyPoiMarkers({ lang = "en", radius = 2000 }) {
 
   return (
     <>
-      {items
-        .filter((item) => {
-          if (!item.coord) return false;
-          return bounds.contains([item.coord.lat, item.coord.lon]);
-        })
-        .map((item) => {
-          const id = `${item.coord.lat}-${item.coord.lon}-${item.title}`;
+      {items.map((item) => {
+        return (
+          <CircleMarker
+            key={`${item.coord}-${item.title}`}
+            center={item.coord}
+            radius={6}
+            pathOptions={{
+              color: "#adcdeb",
+              fillColor: "#3182ce",
+              fillOpacity: 1,
+              weight: 2,
+            }}
+          >
+            <Popup>
+              <div className="poi-popup">
+                <h3>{item.title}</h3>
+                {item.description && <p>{item.description}</p>}
+                {item.link && (
+                  <p>
+                    <Link href={item.link} external>
+                      Open the wikipedia site
+                    </Link>
+                  </p>
+                )}
 
-          const hasAnyPopupOpen = activePoiId !== null;
-
-          return (
-            <CircleMarker
-              key={id}
-              center={[item.coord.lat, item.coord.lon]}
-              radius={8}
-              pathOptions={{
-                color: "#02c2c2ff",
-                fillColor: "#00ffff",
-                fillOpacity: 0.7,
-                weight: 2,
-              }}
-              eventHandlers={{
-                popupopen: () => {
-                  setActivePoiId(id);
-                },
-                popupclose: () => {
-                  setActivePoiId(null);
-                },
-              }}
-            >
-              {!hasAnyPopupOpen && (
-                <Tooltip direction="top" offset={[0, -4]} sticky>
-                  <div>
-                    <strong>{item.title}</strong>
-                    {item.description && (
-                      <div className="poi-tooltip-description">
-                        {item.description}
-                      </div>
-                    )}
-                  </div>
-                </Tooltip>
-              )}
-
-              <Popup>
-                <div className="poi-popup">
-                  <h3>{item.title}</h3>
-                  {item.description && <p>{item.description}</p>}
-                  {item.link && (
-                    <p>
-                      <Link href={item.link} external>
-                        Open the wikipedia site
-                      </Link>
-                    </p>
-                  )}
-
-                  {item.distance != null && (
-                    <p>Distance: {Math.round(item.distance)} m</p>
-                  )}
-                </div>
-              </Popup>
-            </CircleMarker>
-          );
-        })}
+                {item.distance != null && (
+                  <p>Distance: {Math.round(item.distance)} m</p>
+                )}
+              </div>
+            </Popup>
+          </CircleMarker>
+        );
+      })}
     </>
   );
 }
