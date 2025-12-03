@@ -1,18 +1,46 @@
-import { useEffect, useState } from "react";
+// src/hooks/useNearbyWikipedia.js
+import { useEffect, useRef, useState } from "react";
 import { fetchNearby } from "../services/wikiGeoService.js";
 
-export function useNearbyWikipedia({ center, radius, lang }) {
+function distanceInMeters(a, b) {
+  const R = 6371_000;
+  const toRad = (deg) => (deg * Math.PI) / 180;
+
+  const dLat = toRad(b.lat - a.lat);
+  const dLng = toRad(b.lng - a.lng);
+
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+
+  const sinDLat = Math.sin(dLat / 2);
+  const sinDLng = Math.sin(dLng / 2);
+
+  const h =
+    sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng;
+
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+export function useNearbyWikipedia({
+  center,
+  radius,
+  lang,
+  minMoveDistance = 100,
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const lastCenterRef = useRef(null);
 
   useEffect(() => {
     if (
-      center === undefined ||
+      !center ||
       !Number.isFinite(center.lat) ||
       !Number.isFinite(center.lng)
     ) {
-      console.error("Invalid center coordinates:", center);
+      setData([]);
+      setError(null);
+      setLoading(false);
       return;
     }
 
@@ -21,12 +49,19 @@ export function useNearbyWikipedia({ center, radius, lang }) {
       return;
     }
 
+    if (lastCenterRef.current) {
+      const moved = distanceInMeters(lastCenterRef.current, center);
+      if (moved < minMoveDistance) {
+        return;
+      }
+    }
+    lastCenterRef.current = center;
+
     const abortController = new AbortController();
 
     async function loadPois() {
       setLoading(true);
       setError(null);
-      setData([]);
 
       try {
         const pois = await fetchNearby({
@@ -37,8 +72,8 @@ export function useNearbyWikipedia({ center, radius, lang }) {
           signal: abortController.signal,
         });
 
-        setLoading(false);
         setData(pois);
+        setLoading(false);
       } catch (err) {
         if (err.name === "AbortError") {
           return;
@@ -49,18 +84,18 @@ export function useNearbyWikipedia({ center, radius, lang }) {
             ? err.message
             : "Unknown error while loading POIs";
 
-        setLoading(false);
         setError(errorMessage);
         setData([]);
+        setLoading(false);
       }
     }
 
-    (async () => await loadPois())();
+    loadPois();
 
     return () => {
       abortController.abort();
     };
-  }, [center?.lat, center?.lng, radius, lang]);
+  }, [center?.lat, center?.lng, radius, lang, minMoveDistance]);
 
   return [loading, error, data];
 }

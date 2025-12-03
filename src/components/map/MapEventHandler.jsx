@@ -44,8 +44,11 @@ export default function MapEventHandler() {
       }
     },
     locationfound(e) {
+      if (!currentLocation) {
+        map.setView(e.latlng, map.getZoom(), { animate: true });
+      }
+
       setCurrentLocation(e.latlng);
-      map.setView(e.latlng, map.getZoom(), { animate: true });
     },
     moveend() {
       const center = map.getCenter();
