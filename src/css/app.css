@@ -89,3 +89,41 @@
 /* kill the weird original glyph and inject our own */
 .leaflet-routing-collapse-btn::before {
 }
+
+/* Retry button shown when location access is denied */
+.retry-location-btn {
+  position: fixed;
+  top: calc(var(--f7-navbar-height, 56px) + 8px);
+  right: 12px;
+  z-index: 1500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 20px;
+  background: #d8e2ff;
+  color: #000;
+  box-shadow: var(--f7-button-box-shadow, 0 2px 8px rgba(0, 0, 0, 0.12));
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.retry-location-btn:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 420px) {
+  .retry-location-btn {
+    right: 8px;
+    height: 36px;
+    min-width: 40px;
+    border-radius: 18px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}

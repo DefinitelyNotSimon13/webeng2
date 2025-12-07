@@ -10,6 +10,7 @@ import {
   NavTitle,
   Navbar,
   Page,
+  Button,
   f7,
 } from "framework7-react";
 import {
@@ -36,6 +37,33 @@ const HomePage = () => {
     useLocationState(settings);
 
   const notifRef = useRef(null);
+  const requestLocationRetry = () => {
+    if (!navigator?.geolocation) {
+      contextValue?.setLocationError?.(
+        "Geolocation is not supported by this browser.",
+      );
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        contextValue?.setCurrentLocation?.({ lat, lng });
+        contextValue?.setCenterLocation?.({ lat, lng });
+        contextValue?.setLocationError?.(null);
+      },
+      (err) => {
+        const msg =
+          "Location access not possible — please allow location access in your browser/device settings.";
+        if (contextValue?.setLocationError) {
+          contextValue.setLocationError(null);
+          setTimeout(() => contextValue.setLocationError(msg), 50);
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 },
+    );
+  };
   useEffect(() => {
     const msg = contextValue?.locationError;
     if (msg) {
@@ -90,6 +118,18 @@ const HomePage = () => {
         </NavLeft>
         <NavTitle>Map</NavTitle>
       </Navbar>
+
+      {contextValue?.locationError && (
+        <Button
+          className="retry-location-btn"
+          fill
+          small
+          onClick={requestLocationRetry}
+          aria-label="Retry Location Request"
+        >
+          Retry Location Request
+        </Button>
+      )}
 
       <LocationContext.Provider value={contextValue}>
         <SmallPopup id="coord-popup" title="Insert Coordinates">
