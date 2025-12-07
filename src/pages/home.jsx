@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Fab,
   FabButton,
@@ -34,6 +34,39 @@ const HomePage = () => {
 
   const { contextValue, fullRoute, calculateRoute, clearRoute } =
     useLocationState(settings);
+
+  const notifRef = useRef(null);
+  useEffect(() => {
+    const msg = contextValue?.locationError;
+    if (msg) {
+      try {
+        if (notifRef.current) {
+          notifRef.current.close();
+        }
+        notifRef.current = f7.notification.create({
+          text: msg,
+          position: "top",
+          closeTimeout: 0,
+          closeButton: true,
+        });
+        notifRef.current.open();
+      } catch (e) {
+        console.warn("Failed to show Framework7 notification:", e);
+      }
+    } else {
+      if (notifRef.current) {
+        notifRef.current.close();
+        notifRef.current = null;
+      }
+    }
+
+    return () => {
+      if (notifRef.current) {
+        notifRef.current.close();
+        notifRef.current = null;
+      }
+    };
+  }, [contextValue?.locationError]);
 
   return (
     <Page name="home">

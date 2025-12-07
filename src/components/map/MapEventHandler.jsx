@@ -6,6 +6,7 @@ export default function MapEventHandler() {
   const {
     currentLocation,
     setCurrentLocation,
+    setLocationError,
 
     targetLocation,
     setTargetLocation,
@@ -49,6 +50,15 @@ export default function MapEventHandler() {
       }
 
       setCurrentLocation(e.latlng);
+      if (setLocationError) setLocationError(null);
+    },
+    locationerror(e) {
+      console.debug("Map locationerror:", e);
+      if (setLocationError)
+        setLocationError(
+          "Location access not possible — please allow location access in your browser/device settings.",
+        );
+      setCurrentLocation(null);
     },
     moveend() {
       const center = map.getCenter();
