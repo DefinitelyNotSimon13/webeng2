@@ -53,7 +53,7 @@ const HomePage = () => {
         contextValue?.setCenterLocation?.({ lat, lng });
         contextValue?.setLocationError?.(null);
       },
-      (err) => {
+      () => {
         const msg =
           "Location access not possible — please allow location access in your browser/device settings.";
         if (contextValue?.setLocationError) {
