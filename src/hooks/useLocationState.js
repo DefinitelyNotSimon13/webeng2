@@ -15,6 +15,7 @@ export default function useLocationState(settings) {
   const [routeWaypoints, setRouteWaypoints] = useState([]);
 
   const [fullRoute, setFullRoute] = useState([]);
+  const [locationError, setLocationError] = useState(null);
 
   const calculateRoute = () => {
     if (currentLocation) {
@@ -42,6 +43,8 @@ export default function useLocationState(settings) {
       setCenterLocation,
       zoom,
       setZoom,
+      locationError,
+      setLocationError,
       routingStatus,
       setRoutingStatus,
       routeWaypoints,
@@ -52,6 +55,7 @@ export default function useLocationState(settings) {
       targetLocation,
       centerLocation,
       zoom,
+      locationError,
       routingStatus,
       routeWaypoints,
     ],
