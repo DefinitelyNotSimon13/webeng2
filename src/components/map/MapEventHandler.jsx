@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { useMapEvents } from "react-leaflet";
 import LocationContext, { RoutingStatus } from "../../js/context";
+import { f7 } from "framework7-react";
 
 export default function MapEventHandler() {
   const {
@@ -20,6 +21,8 @@ export default function MapEventHandler() {
 
     setZoom,
   } = useContext(LocationContext);
+
+  const shownError = useRef(null);
 
   const map = useMapEvents({
     click(e) {
@@ -54,11 +57,19 @@ export default function MapEventHandler() {
     },
     locationerror(e) {
       console.debug("Map locationerror:", e);
-      if (setLocationError)
-        setLocationError(
-          "Location access not possible — please allow location access in your browser/device settings.",
-        );
-      setCurrentLocation(null);
+      if (e.message === shownError.current?.message) {
+        return;
+      }
+
+      shownError.current = e;
+      f7.notification
+        .create({
+          title: "Error",
+          text: e.message,
+          cssClass: "error-notification",
+          closeButton: true,
+        })
+        .open();
     },
     moveend() {
       const center = map.getCenter();

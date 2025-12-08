@@ -127,3 +127,20 @@
     font-size: 13px;
   }
 }
+
+.error-notification {
+  background: #ff000088 !important;
+
+  .notification-header {
+    .notification-title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+
+  .notification-content {
+    .notification-text {
+      color: #ffffff;
+    }
+  }
+}

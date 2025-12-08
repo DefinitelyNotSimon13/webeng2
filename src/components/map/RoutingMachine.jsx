@@ -44,16 +44,18 @@ function RoutingMachine({
           return null;
         },
         lineOptions: {
-          // styles: [
-          //   { color: "#0f172a", opacity: 0.25, weight: 8 },
-          //   { color: "#38bdf8", opacity: 0.9, weight: 5 },
-          // ],
+          styles: [
+            { color: "black", opacity: 0.15, weight: 9 },
+            { color: "white", opacity: 0.8, weight: 6 },
+            { color: "red", opacity: 1, weight: 2 },
+          ],
         },
         altLineOptions: {
-          // styles: [
-          //   { color: "#0f172a", opacity: 0.15, weight: 6 },
-          //   { color: "#64748b", opacity: 0.7, weight: 4, dashArray: "4,8" },
-          // ],
+          styles: [
+            { color: "black", opacity: 0.15, weight: 9 },
+            { color: "white", opacity: 0.8, weight: 6 },
+            { color: "blue", opacity: 1, weight: 2 },
+          ],
         },
       }).addTo(map);
 

@@ -19,7 +19,7 @@ export default function RoutePlaceholder() {
       pathOptions={{
         color: "red",
         weight: 2,
-        dashArray: "8 16",
+        dashArray: "7 12",
       }}
     />
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
   Fab,
   FabButton,
@@ -10,7 +10,6 @@ import {
   NavTitle,
   Navbar,
   Page,
-  Button,
   f7,
 } from "framework7-react";
 import {
@@ -36,66 +35,6 @@ const HomePage = () => {
   const { contextValue, fullRoute, calculateRoute, clearRoute } =
     useLocationState(settings);
 
-  const notifRef = useRef(null);
-  const requestLocationRetry = () => {
-    if (!navigator?.geolocation) {
-      contextValue?.setLocationError?.(
-        "Geolocation is not supported by this browser.",
-      );
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        contextValue?.setCurrentLocation?.({ lat, lng });
-        contextValue?.setCenterLocation?.({ lat, lng });
-        contextValue?.setLocationError?.(null);
-      },
-      () => {
-        const msg =
-          "Location access not possible — please allow location access in your browser/device settings.";
-        if (contextValue?.setLocationError) {
-          contextValue.setLocationError(null);
-          setTimeout(() => contextValue.setLocationError(msg), 50);
-        }
-      },
-      { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 },
-    );
-  };
-  useEffect(() => {
-    const msg = contextValue?.locationError;
-    if (msg) {
-      try {
-        if (notifRef.current) {
-          notifRef.current.close();
-        }
-        notifRef.current = f7.notification.create({
-          text: msg,
-          position: "top",
-          closeTimeout: 0,
-          closeButton: true,
-        });
-        notifRef.current.open();
-      } catch (e) {
-        console.warn("Failed to show Framework7 notification:", e);
-      }
-    } else {
-      if (notifRef.current) {
-        notifRef.current.close();
-        notifRef.current = null;
-      }
-    }
-
-    return () => {
-      if (notifRef.current) {
-        notifRef.current.close();
-        notifRef.current = null;
-      }
-    };
-  }, [contextValue?.locationError]);
-
   return (
     <Page name="home">
       <Navbar>
@@ -118,18 +57,6 @@ const HomePage = () => {
         </NavLeft>
         <NavTitle>Map</NavTitle>
       </Navbar>
-
-      {contextValue?.locationError && (
-        <Button
-          className="retry-location-btn"
-          fill
-          small
-          onClick={requestLocationRetry}
-          aria-label="Retry Location Request"
-        >
-          Retry Location Request
-        </Button>
-      )}
 
       <LocationContext.Provider value={contextValue}>
         <SmallPopup id="coord-popup" title="Insert Coordinates">
@@ -177,7 +104,17 @@ const HomePage = () => {
             label="Center"
             onClick={() => {
               const loc = contextValue?.currentLocation;
-              if (!loc) return;
+              if (!loc) {
+                f7.notification
+                  .create({
+                    title: "Error",
+                    text: "Unable to recenter, Location not available",
+                    cssClass: "error-notification",
+                    closeButton: true,
+                  })
+                  .open();
+                return;
+              }
               contextValue?.setCenterLocation?.({ ...loc });
             }}
           >
