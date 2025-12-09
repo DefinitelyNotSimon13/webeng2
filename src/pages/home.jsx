@@ -46,7 +46,7 @@ const HomePage = () => {
             href="/about/"
           />
           <Link
-            iconIos="f7:settings"
+            iconIos="f7:gear_alt"
             iconMd="material:settings"
             openIn="panel"
             href="/settings/"
@@ -81,7 +81,7 @@ const HomePage = () => {
       </LocationContext.Provider>
 
       <Fab position="right-bottom" slot="fixed">
-        <Icon ios="f7:placemark_fill" md="material:location_pin" />
+        <Icon ios="f7:menu" md="material:menu" />
         <Icon ios="f7:xmark" md="material:close" />
         <FabButtons position="top">
           <FabButton
@@ -101,7 +101,7 @@ const HomePage = () => {
             <Icon ios="f7:globe" md="material:language" />
           </FabButton>
           <FabButton
-            label="Center"
+            label="Recenter on Location"
             onClick={() => {
               const loc = contextValue?.currentLocation;
               if (!loc) {
@@ -118,7 +118,7 @@ const HomePage = () => {
               contextValue?.setCenterLocation?.({ ...loc });
             }}
           >
-            <Icon ios="f7:locate" md="material:my_location" />
+            <Icon ios="f7:placemark" md="material:my_location" />
           </FabButton>
         </FabButtons>
       </Fab>
