@@ -9,7 +9,7 @@ import { SETTINGS_CONFIG } from "./settings";
 const MyApp = () => {
   const f7params = {
     name: "Map App", // App name
-    theme: "auto", // Automatic theme detection
+    theme: "md", // Always use Material-Design, because iOS is overrated
 
     // App store
     store: store,
