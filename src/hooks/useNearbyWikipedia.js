@@ -2,31 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchNearby } from "../services/wikiGeoService.js";
 
-function distanceInMeters(a, b) {
-  const R = 6371_000;
-  const toRad = (deg) => (deg * Math.PI) / 180;
-
-  const dLat = toRad(b.lat - a.lat);
-  const dLng = toRad(b.lng - a.lng);
-
-  const lat1 = toRad(a.lat);
-  const lat2 = toRad(b.lat);
-
-  const sinDLat = Math.sin(dLat / 2);
-  const sinDLng = Math.sin(dLng / 2);
-
-  const h =
-    sinDLat * sinDLat + Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng;
-
-  return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
-}
-
-export function useNearbyWikipedia({
-  center,
-  radius,
-  lang,
-  minMoveDistance = 100,
-}) {
+export function useNearbyWikipedia({ center, radius, lang }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
@@ -49,12 +25,6 @@ export function useNearbyWikipedia({
       return;
     }
 
-    if (lastCenterRef.current) {
-      const moved = distanceInMeters(lastCenterRef.current, center);
-      if (moved < minMoveDistance) {
-        return;
-      }
-    }
     lastCenterRef.current = center;
 
     const abortController = new AbortController();
@@ -95,7 +65,7 @@ export function useNearbyWikipedia({
     return () => {
       abortController.abort();
     };
-  }, [center?.lat, center?.lng, radius, lang, minMoveDistance]);
+  }, [center?.lat, center?.lng, radius, lang]);
 
   return [loading, error, data];
 }

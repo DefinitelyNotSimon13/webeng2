@@ -1,0 +1,33 @@
+.popup-searchbar {
+  position: sticky !important;
+  top: 5px;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+  div {
+    div {
+      input {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12) !important;
+      }
+    }
+  }
+}
+
+.location-search-block {
+  margin: 0 !important;
+}
+
+.block:has(.location-search-block) {
+  margin: 0 !important;
+  height: auto;
+  min-height: 10px;
+  max-height: 50vh;
+}
+
+.location-search-list {
+  margin: 10px !important;
+  padding-bottom: 10px;
+}
+
+.location-search-list-wrapper {
+  max-height: 100%;
+}

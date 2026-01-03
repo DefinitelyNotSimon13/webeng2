@@ -1,6 +1,6 @@
 .small-popup-block {
   position: absolute;
-  max-width: 100%;
+  max-width: 90%;
   height: 75%;
   display: flex;
   justify-content: center;
@@ -14,13 +14,24 @@
 }
 
 .small-popup-container {
-  max-width: 500px !important;
-  height: 300px !important;
+  max-width: min(500px, 95vw) !important;
+  height: auto !important;
   margin: auto auto !important;
   position: absolute !important;
   top: 50% !important;
   left: 50% !important;
-  transform: translate(-50%, 100vw) !important;
+  transform: translate(-50%, 100vh) !important;
+
+  .page {
+    position: relative;
+    height: auto;
+
+    .page-content {
+      height: auto;
+      min-height: 10px;
+      max-height: 66vh;
+    }
+  }
 }
 
 .small-popup-visible {
@@ -28,9 +39,11 @@
 }
 
 @media (max-width: 630px) {
+  .small-popup-container.popup {
+    --f7-popup-border-radius: 28px !important;
+  }
   .small-popup {
     max-width: 95vw !important;
-    border-radius: 28px;
   }
 
   .block {

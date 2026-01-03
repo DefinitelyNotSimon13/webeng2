@@ -26,6 +26,9 @@ const LocationContext = createContext({
 
   routingStatus: RoutingStatus.INACTIVE,
   setRoutingStatus: () => {},
+
+  highlightedFeature: null,
+  setHighlightedFeature: () => {},
 });
 
 export default LocationContext;

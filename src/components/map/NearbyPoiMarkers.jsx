@@ -7,7 +7,12 @@ import useNearbyPois from "../../hooks/useNearbyPois";
 export default function NearbyPoiMarkers() {
   const [loading, error, items] = useNearbyPois();
 
-  if (loading || error || !items || items.length === 0) {
+  if (
+    (loading && items.length === 0) ||
+    error ||
+    !items ||
+    items.length === 0
+  ) {
     return null;
   }
 
@@ -18,11 +23,11 @@ export default function NearbyPoiMarkers() {
           <CircleMarker
             key={`${item.coord}-${item.title}`}
             center={item.coord}
-            radius={6}
+            radius={8}
             pathOptions={{
-              color: "#adcdeb",
-              fillColor: "#3182ce",
-              fillOpacity: 1,
+              color: "#adcd6b",
+              fillColor: "#31820e",
+              fillOpacity: 0.8,
               weight: 2,
             }}
           >

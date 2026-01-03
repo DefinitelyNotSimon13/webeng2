@@ -28,6 +28,9 @@ import CalculateRouteButton from "../components/map/CalculateRouteButton.jsx";
 import WaypointMarker from "../components/map/WaypointMarker.jsx";
 import useLocationState from "../hooks/useLocationState.js";
 import RoutePlaceholder from "../components/map/RoutePlaceholder.jsx";
+import LocationSearch from "../components/location-search/LocationSearch.jsx";
+import { GeoJSON } from "react-leaflet";
+import { DEFAULT_ZOOM } from "../consts.js";
 
 const HomePage = () => {
   const settings = useSettings();
@@ -73,6 +76,17 @@ const HomePage = () => {
           <RoutePlaceholder />
           <WaypointMarker />
           <RoutingMachine waypoints={fullRoute} />
+
+          {contextValue.highlightedFeature && (
+            <GeoJSON
+              key={JSON.stringify(contextValue.highlightedFeature)}
+              data={contextValue.highlightedFeature}
+            />
+          )}
+
+          <SmallPopup id="search-popup" title="Search Location">
+            <LocationSearch />
+          </SmallPopup>
         </Map>
         <CalculateRouteButton
           onCalculateRoute={calculateRoute}
@@ -115,10 +129,19 @@ const HomePage = () => {
                   .open();
                 return;
               }
+              contextValue?.setZoom(DEFAULT_ZOOM);
               contextValue?.setCenterLocation?.({ ...loc });
             }}
           >
             <Icon ios="f7:placemark" md="material:my_location" />
+          </FabButton>
+          <FabButton
+            label="Seach"
+            onClick={() => {
+              f7.popup.open("#search-popup");
+            }}
+          >
+            <Icon ios="f7:search" md="material:search" />
           </FabButton>
         </FabButtons>
       </Fab>
