@@ -102,9 +102,13 @@ export default function MapEventHandler() {
         .open();
     },
     moveend() {
-      const center = map.getCenter();
+      const mapCenter = map.getCenter();
+      const center = {
+        lat: mapCenter.lat.toFixed(5),
+        lng: mapCenter.lng.toFixed(5),
+      };
       setCenterLocation(center);
-      setZoom(map.getZoom());
+      setZoom(Number(map.getZoom()));
     },
   });
 

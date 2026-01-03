@@ -23,11 +23,11 @@ export default function NearbyPoiMarkers() {
           <CircleMarker
             key={`${item.coord}-${item.title}`}
             center={item.coord}
-            radius={6}
+            radius={8}
             pathOptions={{
-              color: "#adcdeb",
-              fillColor: "#3182ce",
-              fillOpacity: 1,
+              color: "#adcd6b",
+              fillColor: "#31820e",
+              fillOpacity: 0.8,
               weight: 2,
             }}
           >
