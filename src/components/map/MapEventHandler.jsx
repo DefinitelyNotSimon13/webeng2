@@ -3,6 +3,24 @@ import { useMapEvents } from "react-leaflet";
 import LocationContext, { RoutingStatus } from "../../js/context";
 import { f7 } from "framework7-react";
 
+function distanceInMeters(pos1, pos2) {
+  const R = 6371000;
+  const toRad = (x) => (x * Math.PI) / 180;
+
+  const dLat = toRad(pos2.lat - pos1.lat);
+  const dLng = toRad(pos2.lng - pos1.lng);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(pos1.lat)) *
+      Math.cos(toRad(pos2.lat)) *
+      Math.sin(dLng / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
 export default function MapEventHandler() {
   const {
     currentLocation,
@@ -55,15 +73,16 @@ export default function MapEventHandler() {
       }
     },
     locationfound(e) {
-      const position = {
-        lat: Math.round(e.latlng.lat * 1e5) / 1e5,
-        lng: Math.round(e.latlng.lng * 1e5) / 1e5,
-      };
       if (!currentLocation) {
-        map.setView(position, map.getZoom(), { animate: true });
+        map.setView(e.latlng, map.getZoom(), { animate: true });
       }
 
-      setCurrentLocation(position);
+      if (currentLocation) {
+        const distance = distanceInMeters(currentLocation, e.latlng);
+        if (distance < 5) return;
+      }
+
+      setCurrentLocation(e.latlng);
       if (setLocationError) setLocationError(null);
     },
     locationerror(e) {
