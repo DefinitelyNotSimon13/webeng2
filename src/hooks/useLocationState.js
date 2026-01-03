@@ -17,6 +17,8 @@ export default function useLocationState(settings) {
   const [fullRoute, setFullRoute] = useState([]);
   const [locationError, setLocationError] = useState(null);
 
+  const [highlightedFeature, setHighlightedFeature] = useState(null);
+
   const calculateRoute = () => {
     if (currentLocation) {
       setFullRoute([currentLocation, ...routeWaypoints, targetLocation]);
@@ -49,6 +51,8 @@ export default function useLocationState(settings) {
       setRoutingStatus,
       routeWaypoints,
       setRouteWaypoints,
+      highlightedFeature,
+      setHighlightedFeature,
     }),
     [
       currentLocation,
@@ -58,6 +62,7 @@ export default function useLocationState(settings) {
       locationError,
       routingStatus,
       routeWaypoints,
+      highlightedFeature,
     ],
   );
 

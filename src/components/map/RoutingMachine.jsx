@@ -60,6 +60,7 @@ function RoutingMachine({
       }).addTo(map);
 
       controlRef.current.on("routesfound", () => {
+        map.flyToBounds(waypoints, { duration: 2 });
         setRoutingStatus(RoutingStatus.ROUTE_FOUND);
       });
 

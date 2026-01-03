@@ -19,6 +19,8 @@ export default function MapEventHandler() {
 
     routingStatus,
 
+    setHighlightedFeature,
+
     setZoom,
   } = useContext(LocationContext);
 
@@ -31,28 +33,37 @@ export default function MapEventHandler() {
       } else if (routingStatus === RoutingStatus.PLANNING) {
         setRouteWaypoints((prev) => [...prev, e.latlng]);
       } else {
+        setHighlightedFeature(null);
         setTargetLocation(e.latlng);
       }
 
       if (currentLocation) {
         map.flyToBounds(
           [currentLocation, e.latlng, ...routeWaypoints, targetLocation],
-          { padding: [10, 10] },
+          { padding: [10, 10], easeLinearity: 0.8 },
         );
       } else if (targetLocation) {
         map.flyToBounds([...routeWaypoints, e.latlng, targetLocation], {
           padding: [10, 10],
+          easeLinearity: 0.8,
         });
       } else if (routeWaypoints.length > 0) {
-        map.flyToBounds([...routeWaypoints, e.latlng], { padding: [10, 10] });
+        map.flyToBounds([...routeWaypoints, e.latlng], {
+          padding: [10, 10],
+          easeLinearity: 0.8,
+        });
       }
     },
     locationfound(e) {
+      const position = {
+        lat: Math.round(e.latlng.lat * 1e5) / 1e5,
+        lng: Math.round(e.latlng.lng * 1e5) / 1e5,
+      };
       if (!currentLocation) {
-        map.setView(e.latlng, map.getZoom(), { animate: true });
+        map.setView(position, map.getZoom(), { animate: true });
       }
 
-      setCurrentLocation(e.latlng);
+      setCurrentLocation(position);
       if (setLocationError) setLocationError(null);
     },
     locationerror(e) {

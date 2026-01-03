@@ -7,7 +7,12 @@ import useNearbyPois from "../../hooks/useNearbyPois";
 export default function NearbyPoiMarkers() {
   const [loading, error, items] = useNearbyPois();
 
-  if (loading || error || !items || items.length === 0) {
+  if (
+    (loading && items.length === 0) ||
+    error ||
+    !items ||
+    items.length === 0
+  ) {
     return null;
   }
 

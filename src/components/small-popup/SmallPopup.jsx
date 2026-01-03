@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Page,
   Navbar,
@@ -12,22 +12,14 @@ import "./SmallPopup.css";
 import PropTypes from "prop-types";
 
 const SmallPopup = ({ id, title, children }) => {
-  const show = () => {
-    const popup = document.getElementById(id);
-    popup.classList.add("small-popup-visible");
-  };
-
-  const hide = () => {
-    const popup = document.getElementById(id);
-    popup.classList.remove("small-popup-visible");
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Popup
       id={id}
-      className="small-popup-container"
-      onPopupOpen={show}
-      onPopupClose={hide}
+      className={`small-popup-container${isOpen ? " small-popup-visible" : ""}`}
+      onPopupOpen={() => setIsOpen(true)}
+      onPopupClose={() => setIsOpen(false)}
     >
       <Page>
         <Navbar>

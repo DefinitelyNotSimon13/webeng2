@@ -1,0 +1,52 @@
+{
+  "type": "FeatureCollection",
+  "geocoding": {
+    "version": "0.1.0",
+    "attribution": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "licence": "ODbL",
+    "query": "Nostadtstraße 10"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "geocoding": {
+          "place_id": 107947845,
+          "osm_type": "way",
+          "osm_id": 267845489,
+          "osm_key": "building",
+          "osm_value": "yes",
+          "type": "house",
+          "label": "10, Nostadtstraße, Büdesheim, Bingen am Rhein, Landkreis Mainz-Bingen, Rheinland-Pfalz, 55411, Deutschland",
+          "housenumber": "10",
+          "postcode": "55411",
+          "street": "Nostadtstraße",
+          "district": "Büdesheim",
+          "city": "Bingen am Rhein",
+          "county": "Landkreis Mainz-Bingen",
+          "state": "Rheinland-Pfalz",
+          "country": "Deutschland",
+          "country_code": "de",
+          "admin": {
+            "level10": "Büdesheim",
+            "level8": "Bingen am Rhein",
+            "level6": "Landkreis Mainz-Bingen",
+            "level4": "Rheinland-Pfalz"
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [7.9105777, 49.9525018],
+            [7.9106949, 49.9525015],
+            [7.9106954, 49.9525917],
+            [7.9105783, 49.952592],
+            [7.9105777, 49.9525018]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -8,9 +8,10 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import LocationContext from "../../js/context.js";
 import NearbyPoiMarkers from "./NearbyPoiMarkers.jsx";
 import MapEventHandler from "./MapEventHandler.jsx";
+import { f7 } from "framework7-react";
 
 import "../../css/Map.css";
-import { useSettings } from "../settings/settings-helper.js";
+import { SettingsHelper, useSettings } from "../settings/settings-helper.js";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -46,7 +47,9 @@ function MapViewUpdater() {
       Number.isFinite(centerLocation.lat) &&
       Number.isFinite(centerLocation.lng)
     ) {
-      map.panTo([centerLocation.lat, centerLocation.lng], zoom);
+      map.flyTo([centerLocation.lat, centerLocation.lng], zoom, {
+        duration: 1,
+      });
     }
   }, [map, centerLocation?.lat, centerLocation?.lng, zoom]);
 
@@ -59,11 +62,24 @@ function Locator() {
   const settings = useSettings();
   useEffect(() => {
     if (settings.location) {
-      map.locate({
-        watch: true,
-        enableHighAccuracy: true,
-        maximumAge: 1000,
-      });
+      f7.dialog.confirm(
+        "This website uses your current location, for nearby points of interesets and navigation. <br>Confirm?",
+        "Geolocation usage",
+        () => {
+          map.locate({
+            watch: true,
+            enableHighAccuracy: true,
+            maximumAge: 1000,
+          });
+        },
+        () => {
+          SettingsHelper.updateSetting("location", false);
+          f7.dialog.alert(
+            "Location usage has been turned off! You can always reenable it from the settings.",
+            "Geolocation turned off",
+          );
+        },
+      );
     } else {
       setCurrentLocation(null);
     }
